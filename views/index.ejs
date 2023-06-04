@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://kit.fontawesome.com/693f483c38.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Document</title>
+    <style>
+      body {
+        margin: 0px;
+      }
+
+      /* ----------고정 상단바 ---------------------------------------------- */
+      .defaultSetting {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+      }
+
+      .mainTitle {
+        background-color: rgb(182, 182, 182);
+        padding: 20px;
+        text-align: center;
+        font-size: 40px;
+      }
+      .buttonBar {
+        background-color: black;
+        color: white;
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .buttonBar > .write,
+      .buttonBar > .list {
+        padding: 10px;
+        cursor: pointer;
+      }
+      .buttonBar > .search {
+        padding: 10px;
+      }
+
+      .buttonBar > .write:hover,
+      .buttonBar > .list:hover {
+        background-color: white;
+        color: black;
+      }
+      /* ------------------------------------------------------------------------------------- */
+      .bestPost {
+        background-color: rgb(124, 173, 155);
+        margin-top: 140px;
+      }
+      .mostRecentPost {
+        background-color: rgb(124, 173, 155);
+      }
+
+      /* 게시글의 top bar */
+      .bordTopbar {
+        background-color: rgb(71, 71, 75);
+        margin-top: 80px;
+        margin-left: 50px;
+        margin-right: 50px;
+        /* padding-bottom: 15px; */
+        height: 7vh;
+        color: white;
+        border-bottom: 1px solid black;
+        display: flex; /* Flexbox 적용 */
+        justify-content: space-between; /* 좌우 정렬 */
+        align-items: center; /* 세로 가운데 정렬 */
+      }
+
+      .userContainer {
+        display: flex;
+        align-items: center;
+      }
+      /* 게시글의 내용  */
+      .bordContent {
+        background-color: rgb(225, 128, 225);
+        margin-left: 50px;
+        margin-right: 50px;
+        padding-bottom: 170px;
+        color: white;
+      }
+      /* 게시글의 댓글 */
+      .bordComment {
+        background-color: rgb(108, 150, 122);
+        margin-left: 50px;
+        margin-right: 50px;
+        padding-bottom: 2vh;
+        color: white;
+        display: flex;
+        align-items: center;
+      }
+
+      /* ----------------------------------------------------------------------- */
+      .bordInputComment {
+        width: 70%;
+        height: 50%;
+        resize: none;
+      }
+    </style>
+  </head>
+  <!-- 고정 상단바 -->
+  <body>
+    <div class="defaultSetting">
+      <div class="mainTitle">Fit Track</div>
+      <div class="buttonBar">
+        <div class="write" onclick="writeButton()">쓰기</div>
+        <div class="list">목록</div>
+        <div class="search">
+          <input type="text" class="search" id="search" name="search" />
+          <button id="searchButton" onclick="search()">검색</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- bestPost, recentPost -->
+    <div class="bestPost">
+      <hr />
+      <div>BEST POST</div>
+      <hr />
+    </div>
+
+    <ol>
+      <li>첫 번째 글</li>
+      <li>두 번째 글</li>
+      <li>세 번째 글</li>
+    </ol>
+
+    <div class="mostRecentPost">
+      <hr />
+      <div>Most Recent Post</div>
+      <hr />
+    </div>
+
+    <!-- 게시물을 띄우는 창 -->
+    <div class="postBord">
+      <!-- 게시물 쓰기 창의 topbar -->
+      <div class="bordTopbar">
+        <div class="userContainer">
+          <div class="userIcon">
+            <i class="fa-solid fa-user fa-xl" style="color: #ffff"></i>
+          </div>
+          <div class="userId">user :</div>
+        </div>
+        <div class="timeNow">작성 시간</div>
+      </div>
+      <div class="bordContent">게시글</div>
+      <div class="bordComment">
+        댓글
+        <br />
+        <i
+          class="fa-regular fa-heart fa-xl"
+          style="color: #db0606"
+          onclick="clickHeart()"
+        ></i>
+        3
+        <i class="fa-solid fa-heart fa-xl" style="color: #ff0000"></i>
+        <textarea
+          rows="1"
+          cols="50"
+          class="bordInputComment"
+          id="bordInputComment"
+          placeholder="Comment"
+        ></textarea>
+        <i class="fa-regular fa-paper-plane fa-xl" style="color: #000000"></i>
+      </div>
+    </div>
+
+    <!-- 테스트용 -->
+    <!-- 게시물을 띄우는 창 -->
+    <div class="postBord">
+      <!-- 게시물 쓰기 창의 topbar -->
+      <div class="bordTopbar">
+        <div class="userContainer">
+          <div class="userIcon">
+            <i class="fa-solid fa-user fa-xl" style="color: #ffff"></i>
+          </div>
+          <div class="userId">user :</div>
+        </div>
+        <div class="timeNow">작성 시간</div>
+      </div>
+      <div class="bordContent">게시글</div>
+      <div class="bordComment">좋아요, 댓글 넣기</div>
+    </div>
+    <!-- 게시물을 띄우는 창 -->
+    <div class="postBord">
+      <!-- 게시물 쓰기 창의 topbar -->
+      <div class="bordTopbar">
+        <div class="userContainer">
+          <div class="userIcon">
+            <i class="fa-solid fa-user fa-xl" style="color: #ffff"></i>
+          </div>
+          <div class="userId">user :</div>
+        </div>
+        <div class="timeNow">작성 시간</div>
+      </div>
+      <div class="bordContent">게시글</div>
+      <div class="bordComment">좋아요, 댓글 넣기</div>
+    </div>
+    <!-- 게시물을 띄우는 창 -->
+    <div class="postBord">
+      <!-- 게시물 쓰기 창의 topbar -->
+      <div class="bordTopbar">
+        <div class="userContainer">
+          <div class="userIcon">
+            <i class="fa-solid fa-user fa-xl" style="color: #ffff"></i>
+          </div>
+          <div class="userId">user :</div>
+        </div>
+        <div class="timeNow">작성 시간</div>
+      </div>
+      <div class="bordContent">게시글</div>
+      <div class="bordComment">좋아요, 댓글 넣기</div>
+    </div>
+    <!-- 게시물을 띄우는 창 -->
+    <div class="postBord">
+      <!-- 게시물 쓰기 창의 topbar -->
+      <div class="bordTopbar">
+        <div class="userContainer">
+          <div class="userIcon">
+            <i class="fa-solid fa-user fa-xl" style="color: #ffff"></i>
+          </div>
+          <div class="userId">user :</div>
+        </div>
+        <div class="timeNow">작성 시간</div>
+      </div>
+      <div class="bordContent">게시글</div>
+      <div class="bordComment">좋아요, 댓글 넣기</div>
+    </div>
+    <!-- 게시물을 띄우는 창 -->
+    <div class="postBord">
+      <!-- 게시물 쓰기 창의 topbar -->
+      <div class="bordTopbar">
+        <div class="userContainer">
+          <div class="userIcon">
+            <i class="fa-solid fa-user fa-xl" style="color: #ffff"></i>
+          </div>
+          <div class="userId">user :</div>
+        </div>
+        <div class="timeNow">작성 시간</div>
+      </div>
+      <div class="bordContent">게시글</div>
+      <div class="bordComment">좋아요, 댓글 넣기</div>
+    </div>
+  </body>
+
+  <script>
+    const postBord = document.querySelector(".postBord");
+    const write = document.querySelector(".write");
+    const list = document.querySelector(".list");
+    const writeBord = document.querySelector(".writeBord");
+
+    document.addEventListener("DOMContentLoaded", () => {
+      //   writeBord.hidden = true;
+    });
+
+    function writeButton() {
+      //쓰기를 눌렀을 경우(사진도 첨부할 수 있는 상세 페이지로 이동하기)
+    }
+
+    function search() {
+      //검색 눌렀을 경우 데이터 베이스에서 일치하는 단어 있는 쿼리문 가져오기
+      const searchInput = document.getElementById("search");
+      console.log(searchInput.value);
+      if (!searchInput.value) {
+        alert("검색어를 입력하세요");
+      } else {
+        //검색 페이지 렌더링
+        axios({
+          method: "POST",
+          url: "/search",
+          data: { keyword: searchInput.value },
+        }).then((res) => {
+          console.log("데이터 보내기 성공해서 받은 데이터", res.data.postData);
+        });
+      }
+    }
+    function clickHeart() {
+      alert("click");
+    }
+  </script>
+</html>
