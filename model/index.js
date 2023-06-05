@@ -53,6 +53,18 @@ exports.Msearch = (searchData, callback) => {
       console.log("err:", err);
     }
     console.log("keyword search data(여기는 model!!) : ", rows);
+    callback(rows);
+  });
+};
+
+//하트수가 많은 게시글 3개 불러오기
+exports.MbestPost = (callback) => {
+  const query = `SELECT * FROM posts ORDER BY like_count DESC LIMIT 3`;
+  conn.query(query, (err, rows) => {
+    if (err) {
+      console.log("err:", err);
+    }
+    console.log("좋아요 많은 3개 : ", rows);
     callback(null, rows);
   });
 };
