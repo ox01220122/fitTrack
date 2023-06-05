@@ -59,10 +59,10 @@
         background-color: rgb(124, 173, 155);
       }
 
-      /* 게시글의 top bar */
+      /* 게시글의 top bar ! margin-top으로 게시물 사이 간격 조정하기 */
       .bordTopbar {
         background-color: rgb(71, 71, 75);
-        margin-top: 80px;
+        margin-top: 50px;
         margin-left: 50px;
         margin-right: 50px;
         /* padding-bottom: 15px; */
@@ -72,11 +72,13 @@
         display: flex; /* Flexbox 적용 */
         justify-content: space-between; /* 좌우 정렬 */
         align-items: center; /* 세로 가운데 정렬 */
+        font-size: 15px;
       }
 
       .userContainer {
         display: flex;
         align-items: center;
+        font-size: 15px;
       }
       /* 게시글의 내용  */
       .bordContent {
@@ -85,7 +87,21 @@
         margin-right: 50px;
         padding-bottom: 170px;
         color: white;
+        font-size: 15px;
       }
+      .bordContentTitle {
+        background-color: green;
+        display: flex;
+        justify-content: center;
+        /* align-items: center; */
+      }
+      .bordContentContent {
+        background-color: blue;
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+      }
+
       /* 게시글의 댓글 */
       .bordComment {
         background-color: rgb(108, 150, 122);
@@ -102,6 +118,9 @@
         width: 70%;
         height: 50%;
         resize: none;
+      }
+      .empty_heart {
+        cursor: auto;
       }
     </style>
   </head>
@@ -138,29 +157,47 @@
       <hr />
     </div>
 
+    <!-- ----------------------게시물 띄우기!!!-------------------------------------------------- -->
+
     <!-- 게시물을 띄우는 창 -->
     <div class="postBord">
       <!-- 게시물 쓰기 창의 topbar -->
       <div class="bordTopbar">
         <div class="userContainer">
           <div class="userIcon">
-            <i class="fa-solid fa-user fa-xl" style="color: #ffff"></i>
+            &nbsp;&nbsp;<i
+              class="fa-solid fa-user fa-xl"
+              style="color: #ffff"
+            ></i>
           </div>
-          <div class="userId">user :</div>
+          <div class="userId">&nbsp;<%= data[0].user_id %></div>
         </div>
-        <div class="timeNow">작성 시간</div>
+        <div class="timeNow">
+          <%= data[0].created_date.toISOString().split('T')[0] %> <% const
+          timeParts = data[0].created_time.split(':'); %> <%= timeParts[0]
+          %>:<%= timeParts[1] %>&nbsp;&nbsp;
+        </div>
       </div>
-      <div class="bordContent">게시글</div>
+      <div class="bordContent">
+        <span style="justify-content: center">title</span>
+        <br />
+        <div class="bordContentTitle"><%= data[0].title %><br /></div>
+        <span style="justify-content: center">content</span>
+        <br />
+        <div class="bordContentContent"><%= data[0].content %></div>
+      </div>
       <div class="bordComment">
         댓글
         <br />
+        <!-- 비어있는 하트 -->
         <i
+          id="empty_heart"
           class="fa-regular fa-heart fa-xl"
           style="color: #db0606"
           onclick="clickHeart()"
         ></i>
-        3
-        <i class="fa-solid fa-heart fa-xl" style="color: #ff0000"></i>
+        <%= data[0].like_count %>
+
         <textarea
           rows="1"
           cols="50"
@@ -168,89 +205,14 @@
           id="bordInputComment"
           placeholder="Comment"
         ></textarea>
+        <!-- 전송버튼 -->
         <i class="fa-regular fa-paper-plane fa-xl" style="color: #000000"></i>
       </div>
-    </div>
-
-    <!-- 테스트용 -->
-    <!-- 게시물을 띄우는 창 -->
-    <div class="postBord">
-      <!-- 게시물 쓰기 창의 topbar -->
-      <div class="bordTopbar">
-        <div class="userContainer">
-          <div class="userIcon">
-            <i class="fa-solid fa-user fa-xl" style="color: #ffff"></i>
-          </div>
-          <div class="userId">user :</div>
-        </div>
-        <div class="timeNow">작성 시간</div>
-      </div>
-      <div class="bordContent">게시글</div>
-      <div class="bordComment">좋아요, 댓글 넣기</div>
-    </div>
-    <!-- 게시물을 띄우는 창 -->
-    <div class="postBord">
-      <!-- 게시물 쓰기 창의 topbar -->
-      <div class="bordTopbar">
-        <div class="userContainer">
-          <div class="userIcon">
-            <i class="fa-solid fa-user fa-xl" style="color: #ffff"></i>
-          </div>
-          <div class="userId">user :</div>
-        </div>
-        <div class="timeNow">작성 시간</div>
-      </div>
-      <div class="bordContent">게시글</div>
-      <div class="bordComment">좋아요, 댓글 넣기</div>
-    </div>
-    <!-- 게시물을 띄우는 창 -->
-    <div class="postBord">
-      <!-- 게시물 쓰기 창의 topbar -->
-      <div class="bordTopbar">
-        <div class="userContainer">
-          <div class="userIcon">
-            <i class="fa-solid fa-user fa-xl" style="color: #ffff"></i>
-          </div>
-          <div class="userId">user :</div>
-        </div>
-        <div class="timeNow">작성 시간</div>
-      </div>
-      <div class="bordContent">게시글</div>
-      <div class="bordComment">좋아요, 댓글 넣기</div>
-    </div>
-    <!-- 게시물을 띄우는 창 -->
-    <div class="postBord">
-      <!-- 게시물 쓰기 창의 topbar -->
-      <div class="bordTopbar">
-        <div class="userContainer">
-          <div class="userIcon">
-            <i class="fa-solid fa-user fa-xl" style="color: #ffff"></i>
-          </div>
-          <div class="userId">user :</div>
-        </div>
-        <div class="timeNow">작성 시간</div>
-      </div>
-      <div class="bordContent">게시글</div>
-      <div class="bordComment">좋아요, 댓글 넣기</div>
-    </div>
-    <!-- 게시물을 띄우는 창 -->
-    <div class="postBord">
-      <!-- 게시물 쓰기 창의 topbar -->
-      <div class="bordTopbar">
-        <div class="userContainer">
-          <div class="userIcon">
-            <i class="fa-solid fa-user fa-xl" style="color: #ffff"></i>
-          </div>
-          <div class="userId">user :</div>
-        </div>
-        <div class="timeNow">작성 시간</div>
-      </div>
-      <div class="bordContent">게시글</div>
-      <div class="bordComment">좋아요, 댓글 넣기</div>
     </div>
   </body>
 
   <script>
+    (function () {})();
     const postBord = document.querySelector(".postBord");
     const write = document.querySelector(".write");
     const list = document.querySelector(".list");
@@ -261,7 +223,8 @@
     });
 
     function writeButton() {
-      //쓰기를 눌렀을 경우(사진도 첨부할 수 있는 상세 페이지로 이동하기)
+      //write페이지로 이동하기
+      window.location.href = "/write";
     }
 
     function search() {
@@ -278,11 +241,19 @@
           data: { keyword: searchInput.value },
         }).then((res) => {
           console.log("데이터 보내기 성공해서 받은 데이터", res.data.postData);
+          window.location.href = "/list";
         });
       }
     }
     function clickHeart() {
-      alert("click");
+      const heartIcon = document.querySelector(".fa-heart");
+
+      if (heartIcon.className == "fa-regular fa-heart fa-xl") {
+        heartIcon.className = "fa-solid fa-heart fa-xl";
+        heartIcon.style.color = "#ff0000";
+      } else {
+        heartIcon.className = "fa-regular fa-heart fa-xl";
+      }
     }
   </script>
 </html>

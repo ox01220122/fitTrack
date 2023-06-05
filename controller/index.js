@@ -1,13 +1,22 @@
 const userData = require("../model");
 
 //localhost:8000
-// exports.main = (req, res) => {
-//   res.render("index");
-// };
+exports.main = (req, res) => {
+  console.log("check");
+  userData.MsearchAll((value) => {
+    console.log("여기는 controller,전체 데이터 출력 rows !! : ", value);
+    res.render("index", { data: value });
+  });
+};
 
 //localhost:8000/write
 exports.write = (req, res) => {
   res.render("write");
+};
+
+//localhost:8000/list
+exports.list = (req, res) => {
+  res.render("list");
 };
 
 //localhost:8000/write
@@ -18,18 +27,9 @@ exports.Cwrite = (req, res) => {
       return;
     }
     console.log("여기는 controller야! model에서 받은 데이터 출력 :", rows[0]);
-    // const postData = {
-    //   post_id: rows[0].post_id,
-    //   user_id: rows[0].user_id,
-    //   title: rows[0].title,
-    //   content: rows[0].content,
-    //   created_date: rows[0].created_date.toISOString().split("T")[0],
-    //   created_time: rows[0].created_time,
-    //   like_count: rows[0].like_count,
-    // };
-    res.render("index", { postData: rows[0] });
 
-    // res.send({ postData: postData });
+    //res.render("index");
+    res.send({ result: true });
   });
 };
 

@@ -22,35 +22,12 @@
       text-align: center;
       font-size: 40px;
     }
-    .buttonBar {
-      background-color: black;
-      color: white;
-      display: flex;
-      justify-content: flex-end;
-    }
 
-    .buttonBar > .write,
-    .buttonBar > .list {
-      padding: 10px;
-      cursor: pointer;
-    }
-    .buttonBar > .search {
-      padding: 10px;
-    }
-
-    .buttonBar > .write:hover,
-    .buttonBar > .list:hover {
-      background-color: white;
-      color: black;
-    }
     /* --------게시물 추가--------------------------------------------------- */
     .postAll {
       margin-top: 160px; /*상단바와 입력 창 간의 간격 조정하기*/
     }
-    .postBord {
-      align-items: center;
-      justify-items: center;
-    }
+
     /* 게시글 추가의 top bar */
     .bordTopbar {
       background-color: rgb(71, 71, 75);
@@ -127,14 +104,6 @@
   <body>
     <div class="defaultSetting">
       <div class="mainTitle">Fit Track</div>
-      <div class="buttonBar">
-        <div class="write" onclick="writeButton()">쓰기&nbsp;</div>
-        <div class="list">목록&nbsp;</div>
-        <div class="search">
-          <input type="text" />
-          <button id="searchButton" onclick="search()">검색</button>
-        </div>
-      </div>
     </div>
     <!-- 게시물 & 입력창 -->
     <div class="postAll">
@@ -237,25 +206,26 @@
           data: writeData,
         }).then((res) => {
           console.log(
-            "데이터 보내기 성공해서 받은 데이터",
-            res.data.postData.post_id
+            "데이터 보내기 성공해서 받은 데이터"
+            //res.data.postData.post_id
           );
-          const form_info = document.forms["form_info"];
-          const postData = res.data.postData;
-          console.log("post_id받아온거 출력", postData.post_id);
-          form_info.post_id.value = postData.post_id;
-          form_info.user_id.value = postData.user_id;
-          form_info.title.value = postData.title;
-          form_info.content.value = postData.content;
-          form_info.created_date.value = postData.created_date;
-          form_info.created_time.value = postData.created_time;
-          form_info.like_count.value = postData.like_count;
-          console.log("form 채워진거 출력", form_info.post_id);
-          form_info.submit();
+          // const form_info = document.forms["form_info"];
+          // const postData = res.data.postData;
+          // console.log("post_id받아온거 출력", postData.post_id);
+          // form_info.post_id.value = postData.post_id;
+          // form_info.user_id.value = postData.user_id;
+          // form_info.title.value = postData.title;
+          // form_info.content.value = postData.content;
+          // form_info.created_date.value = postData.created_date;
+          // form_info.created_time.value = postData.created_time;
+          // form_info.like_count.value = postData.like_count;
+          // console.log("form 채워진거 출력", form_info.post_id);
+          // form_info.submit();
         });
         alert("버튼 눌렸어용");
-        bord.bordInputTitle.value = "";
-        bord.bordInputContent.value = "";
+        window.location.href = "/";
+        //bord.bordInputTitle.value = "";
+        //bord.bordInputContent.value = "";
       }
     }
   </script>
