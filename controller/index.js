@@ -11,7 +11,7 @@ exports.main = (req, res) => {
   });
 };
 
-//GET localhost:8000/write (write페이지 렌더링)
+//GET localhost:8000/write
 exports.write = (req, res) => {
   userData.MsigninUser((signinUser) => {
     console.log("확인", signinUser);
@@ -20,10 +20,13 @@ exports.write = (req, res) => {
 };
 
 //POST localhost:8000/write
+// exports.Cwrite = (req, res) => {
+//   userData.Mwrite(req.body, (err, rows) => {
+//     res.send({ result: true });
+//   });
+// };
 exports.Cwrite = (req, res) => {
-  userData.Mwrite(req.body, (err, rows) => {
-    res.send({ result: true });
-  });
+  userData.Mwrite(req.body);
 };
 
 //GET localhost:8000/list
@@ -53,7 +56,6 @@ exports.search = (req, res) => {
 //POST localhost:8000/search
 exports.Csearch = (req, res) => {
   userData.Msearch(req.body, (rows) => {
-    console.log("여기는 controller야! model에서 받은 데이터 출력 :", rows);
     res.send({ postData: rows });
   });
 };

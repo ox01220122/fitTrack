@@ -173,5 +173,22 @@
     function mainButton() {
       window.location.href = "/";
     }
+
+    function mypostButton() {
+      axios({
+        method: "GET",
+        url: "/list/showPost",
+        params: {
+          id: form.id.value,
+          userid: form.userid.value,
+          name: form.username.value,
+          pw: form.pw.value,
+        },
+      }).then((res) => {
+        if (res.data.result) {
+          alert("회원정보 수정완료!!!");
+        }
+      });
+    }
   </script>
 </html>

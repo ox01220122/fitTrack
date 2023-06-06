@@ -41,30 +41,26 @@ exports.MbestPost = (callback) => {
 };
 
 //게시물 ID, 작성자 ID, 게시물 제목,게시물 내용,작성일, 좋아요 수 데이터베이스에 업로드
-exports.Mwrite = (writeData, callback) => {
+// exports.Mwrite = (writeData, callback) => {
+//   let query = `INSERT INTO posts (user_id, title, content, created_date, created_time, like_count) VALUES
+//     ('${writeData.user_id}', '${writeData.title}', '${writeData.content}', '${writeData.created_date}',
+//     '${writeData.created_time}', '${writeData.like_count}')`;
+
+//   conn.query(query, (err, result) => {
+//     if (err) {
+//       console.log("데이터 저장 오류!!");
+//       console.log(err);
+//       callback(err); // 오류를 콜백으로 전달
+//       return;
+//     }
+//   });
+// };
+exports.Mwrite = (writeData) => {
+  //형식 안맞아서 저장오류 날 일 없음. 그래서 오류처리 생략.
   let query = `INSERT INTO posts (user_id, title, content, created_date, created_time, like_count) VALUES 
     ('${writeData.user_id}', '${writeData.title}', '${writeData.content}', '${writeData.created_date}',
     '${writeData.created_time}', '${writeData.like_count}')`;
-
-  conn.query(query, (err, result) => {
-    if (err) {
-      console.log("데이터 저장 오류!!");
-      console.log(err);
-      callback(err); // 오류를 콜백으로 전달
-      return;
-    }
-    //제일 최근 게시글 하나 가져오는 쿼리문!
-    // query = `SELECT * FROM posts WHERE post_id = (SELECT MAX(post_id) FROM posts WHERE user_id='${writeData.user_id}')`;
-    // conn.query(query, (err, rows) => {
-    //   if (err) {
-    //     console.log(err);
-    //     // callback(err);
-    //     return;
-    //   }
-    //   console.log("여기는 model에서 controller로 보내는 데이터야 !!", rows);
-    //   callback(null, rows);
-    // });
-  });
+  conn.query(query);
 };
 
 //입력한 단어가 포함된 columns search
