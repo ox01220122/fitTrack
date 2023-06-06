@@ -2,8 +2,11 @@ const userData = require("../model");
 
 //GET localhost:8000 (전체 데이터 -> index가 render될 때마다 모든 데이터를 불러와 게시글 창 생성)
 exports.main = (req, res) => {
-  userData.MsearchAll((value) => {
-    res.render("index", { searchAllData: value });
+  userData.MsearchAll((searchAllData) => {
+    userData.MbestPost((bestPost) => {
+      console.log("bestPost : ", bestPost);
+      res.render("index", { searchAllData, bestPost });
+    });
   });
 };
 
@@ -19,9 +22,10 @@ exports.list = (req, res) => {
 
 //GET localhost:8000/search (serch페이지 렌더링)
 exports.search = (req, res) => {
-  userData.Msearch(req.query, (value) => {
-    console.log("controller입니다 : ", value);
-    res.render("search", { searchData: value });
+  console.log(req.query.keyword);
+  userData.Msearch(req.query.keyword, (value) => {
+    const result = value;
+    res.render("search", { searchData: result });
   });
 };
 

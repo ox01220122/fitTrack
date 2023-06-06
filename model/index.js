@@ -47,7 +47,7 @@ exports.Mwrite = (writeData, callback) => {
 
 //입력한 단어가 포함된 columns search
 exports.Msearch = (searchData, callback) => {
-  const query = `SELECT * FROM posts WHERE title LIKE '%${searchData.keyword}%' OR content LIKE '%${searchData.keyword}%'`;
+  const query = `SELECT * FROM posts WHERE title LIKE '%${searchData}%' OR content LIKE '%${searchData}%'`;
   conn.query(query, (err, rows) => {
     if (err) {
       console.log("err:", err);
@@ -57,14 +57,14 @@ exports.Msearch = (searchData, callback) => {
   });
 };
 
-//하트수가 많은 게시글 3개 불러오기
+//하트수가 많은 게시글 제목 3개 불러오기(main페이지에 띄워주기)
 exports.MbestPost = (callback) => {
-  const query = `SELECT * FROM posts ORDER BY like_count DESC LIMIT 3`;
+  const query = `SELECT title, like_count  FROM posts ORDER BY like_count DESC LIMIT 3`;
   conn.query(query, (err, rows) => {
     if (err) {
       console.log("err:", err);
     }
     console.log("좋아요 많은 3개 : ", rows);
-    callback(null, rows);
+    callback(rows);
   });
 };

@@ -147,7 +147,13 @@
         <div class="write" onclick="writeButton()">쓰기</div>
         <div class="list">목록</div>
         <div class="search">
-          <input type="text" class="search" id="search" name="search" />
+          <input
+            type="text"
+            class="search"
+            id="search"
+            name="search"
+            autocomplete="off"
+          />
           <button id="searchButton" onclick="search()">검색</button>
         </div>
       </div>
@@ -160,10 +166,19 @@
       <hr />
     </div>
 
+    <!-- 데이터베이스가 비어있을 경우, like_count가 0일 경우 BEST POST 출력 -->
     <ol>
-      <li>첫 번째 글</li>
-      <li>두 번째 글</li>
-      <li>세 번째 글</li>
+      <%let noPostCount = 0 %> <% if (bestPost.length === 0) { %>
+      <div>게시물이 없습니다</div>
+      <% } else { %> <% for (let i = 0; i < bestPost.length; i++) { %> <% if
+      (bestPost[i].like_count === 0) { %> <% ++noPostCount %> <% continue%> <% }
+      else { %>
+      <hr />
+      <li><%= bestPost[i].title %></li>
+      <hr />
+      <% } %> <% } %> <% } %> <% if(noPostCount == bestPost.length) {%>
+      <div>Best 게시물이 없습니다</div>
+      <%}%>
     </ol>
 
     <div class="mostRecentPost">
@@ -172,8 +187,10 @@
       <hr />
     </div>
 
-    <!-- ----------------------게시물 띄우기!!!-------------------------------------------------- -->
-
+    <!------------------------게시물 띄우기!!!---------------------------------------------------->
+    <% if (searchAllData.length === 0) { %>
+    <div class="noPosts">게시물이 없습니다.</div>
+    <% } else { %> <% for (let i = 0; i < searchAllData.length; i++) { %>
     <!-- 게시물을 띄우는 창 -->
     <div class="postBord">
       <!-- 게시물 쓰기 창의 topbar -->
@@ -185,21 +202,21 @@
               style="color: #ffff"
             ></i>
           </div>
-          <div class="userId">&nbsp;<%= searchAllData[0].user_id %></div>
+          <div class="userId">&nbsp;<%= searchAllData[i].user_id %></div>
         </div>
         <div class="timeNow">
-          <%= searchAllData[0].created_date.toISOString().split('T')[0] %> <%
-          const timeParts = searchAllData[0].created_time.split(':'); %> <%=
+          <%= searchAllData[i].created_date.toISOString().split('T')[0] %> <%
+          const timeParts = searchAllData[i].created_time.split(':'); %> <%=
           timeParts[0] %>:<%= timeParts[1] %>&nbsp;&nbsp;
         </div>
       </div>
       <div class="bordContent">
         <span class="denoteTitle">title</span>
         <br />
-        <div class="bordContentTitle"><%= searchAllData[0].title %><br /></div>
+        <div class="bordContentTitle"><%= searchAllData[i].title %><br /></div>
         <span class="denoteContent">content</span>
         <br />
-        <div class="bordContentContent"><%= searchAllData[0].content %></div>
+        <div class="bordContentContent"><%= searchAllData[i].content %></div>
       </div>
       <div class="bordComment">
         <!-- <br /> -->
@@ -211,7 +228,7 @@
             style="color: #db0606"
             onclick="clickHeart()"
           ></i>
-          <%= searchAllData[0].like_count %>
+          <%= searchAllData[i].like_count %>
         </div>
 
         <div class="sendComment">
@@ -231,6 +248,7 @@
         </div>
       </div>
     </div>
+    <% } %> <% } %>
   </body>
 
   <script>
@@ -256,9 +274,12 @@
         axios({
           method: "GET",
           url: "/search",
-          params: { keyword: searchInput.value },
+          params: { keyword: searchInput.value }, // 데이터를 params에 담아 전송
         }).then((res) => {
-          // console.log("데이터 보내기 성공해서 받은 데이터", res.data.postData);
+          console.log(
+            "데이터 보내기 성공해서 받은 데이터",
+            res.data.searchData
+          );
           window.location.href = "/search";
         });
       }
