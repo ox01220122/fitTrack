@@ -4,21 +4,24 @@ const userData = require("../model");
 exports.main = (req, res) => {
   userData.MsearchAll((searchAllData) => {
     userData.MbestPost((bestPost) => {
-      console.log("bestPost : ", bestPost);
-      res.render("index", { searchAllData, bestPost });
+      userData.MsigninUser((signinUser) => {
+        res.render("index", { searchAllData, bestPost, signinUser });
+      });
     });
   });
 };
 
 //GET localhost:8000/write (write페이지 렌더링)
 exports.write = (req, res) => {
-  res.render("write");
+  userData.MsigninUser((signinUser) => {
+    console.log("확인", signinUser);
+    res.render("write", { signinUser });
+  });
 };
 
 //POST localhost:8000/write
 exports.Cwrite = (req, res) => {
   userData.Mwrite(req.body, (err, rows) => {
-    console.log("여기는 controller야! model에서 받은 데이터 출력 :", rows[0]);
     res.send({ result: true });
   });
 };

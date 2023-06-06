@@ -116,7 +116,9 @@
               <div class="userIcon">
                 <i class="fa-solid fa-user fa-xl" style="color: #ffff"></i>
               </div>
-              <div class="userId">&nbsp;&nbsp;user :</div>
+              <div class="userId">
+                &nbsp;&nbsp;user : <%= signinUser[0].signin_id%>
+              </div>
             </div>
             <!-- 실시간 시간 가져오기 -->
             <div class="timeNow">&nbsp;&nbsp;현재 시간(가능하면 만들기)</div>
@@ -193,7 +195,7 @@
 
         //post아이디를 쿠키로 저장해야할지 생각해야할듯
         const writeData = {
-          user_id: "user1234", //임시 데이터(로그인 정보에서 받아오기)
+          user_id: "<%= signinUser[0].signin_id%>", //임시 데이터(로그인 정보에서 받아오기)
           title: bord.bordInputTitle.value,
           content: bord.bordInputContent.value,
           created_date: created_date,

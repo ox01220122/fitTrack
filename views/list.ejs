@@ -27,6 +27,7 @@
         justify-content: flex-end;
       }
 
+      .buttonBar > .mypost,
       .buttonBar > .write,
       .buttonBar > .list {
         padding: 10px;
@@ -35,7 +36,7 @@
       .buttonBar > .search {
         padding: 10px;
       }
-
+      .buttonBar > .mypost:hover,
       .buttonBar > .write:hover,
       .buttonBar > .list:hover {
         background-color: white;
@@ -104,6 +105,7 @@
     <div class="defaultSetting">
       <div class="mainTitle">Fit Track</div>
       <div class="buttonBar">
+        <div class="mypost" onclick="mypostButton()">내 게시물</div>
         <div class="write" onclick="writeButton()">쓰기</div>
         <div class="list" onclick="mainButton()">TIME LINE</div>
         <div class="search">
@@ -148,7 +150,20 @@
 
   <script>
     function showPost() {
-      //axios사용해서 데이터 보낸 후 보여줘야할듯
+      axios({
+        method: "GET",
+        url: "/list/showPost",
+        params: {
+          id: form.id.value,
+          userid: form.userid.value,
+          name: form.username.value,
+          pw: form.pw.value,
+        },
+      }).then((res) => {
+        if (res.data.result) {
+          alert("회원정보 수정완료!!!");
+        }
+      });
     }
 
     function writeButton() {

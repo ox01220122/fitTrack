@@ -18,6 +18,28 @@ exports.MsearchAll = (callback) => {
   });
 };
 
+//로그인한 사용자의 정보 가져오기
+exports.MsigninUser = (callback) => {
+  const query = `SELECT * FROM signin_user `;
+  conn.query(query, (err, rows) => {
+    if (err) {
+      console.log("err:", err);
+    }
+    callback(rows);
+  });
+};
+
+//하트수가 많은 게시글 제목 3개 불러오기(main페이지에 띄워주기)
+exports.MbestPost = (callback) => {
+  const query = `SELECT title, like_count  FROM posts ORDER BY like_count DESC LIMIT 3`;
+  conn.query(query, (err, rows) => {
+    if (err) {
+      console.log("err:", err);
+    }
+    callback(rows);
+  });
+};
+
 //게시물 ID, 작성자 ID, 게시물 제목,게시물 내용,작성일, 좋아요 수 데이터베이스에 업로드
 exports.Mwrite = (writeData, callback) => {
   let query = `INSERT INTO posts (user_id, title, content, created_date, created_time, like_count) VALUES 
@@ -53,18 +75,6 @@ exports.Msearch = (searchData, callback) => {
       console.log("err:", err);
     }
     console.log("keyword search data(여기는 model!!) : ", rows);
-    callback(rows);
-  });
-};
-
-//하트수가 많은 게시글 제목 3개 불러오기(main페이지에 띄워주기)
-exports.MbestPost = (callback) => {
-  const query = `SELECT title, like_count  FROM posts ORDER BY like_count DESC LIMIT 3`;
-  conn.query(query, (err, rows) => {
-    if (err) {
-      console.log("err:", err);
-    }
-    console.log("좋아요 많은 3개 : ", rows);
     callback(rows);
   });
 };

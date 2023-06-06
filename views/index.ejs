@@ -36,6 +36,7 @@
         justify-content: flex-end;
       }
 
+      .buttonBar > .mypost,
       .buttonBar > .write,
       .buttonBar > .list {
         padding: 10px;
@@ -45,6 +46,7 @@
         padding: 10px;
       }
 
+      .buttonBar > .mypost:hover,
       .buttonBar > .write:hover,
       .buttonBar > .list:hover {
         background-color: white;
@@ -144,6 +146,7 @@
     <div class="defaultSetting">
       <div class="mainTitle">Fit Track</div>
       <div class="buttonBar">
+        <div class="mypost" onclick="mypostButton()">내 게시물</div>
         <div class="write" onclick="writeButton()">쓰기</div>
         <div class="list" onclick="listButton()">목록</div>
         <div class="search">
