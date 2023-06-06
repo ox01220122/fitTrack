@@ -209,23 +209,12 @@
             "데이터 보내기 성공해서 받은 데이터"
             //res.data.postData.post_id
           );
-          // const form_info = document.forms["form_info"];
-          // const postData = res.data.postData;
-          // console.log("post_id받아온거 출력", postData.post_id);
-          // form_info.post_id.value = postData.post_id;
-          // form_info.user_id.value = postData.user_id;
-          // form_info.title.value = postData.title;
-          // form_info.content.value = postData.content;
-          // form_info.created_date.value = postData.created_date;
-          // form_info.created_time.value = postData.created_time;
-          // form_info.like_count.value = postData.like_count;
-          // console.log("form 채워진거 출력", form_info.post_id);
-          // form_info.submit();
         });
         alert("버튼 눌렸어용");
         window.location.href = "/";
-        //bord.bordInputTitle.value = "";
-        //bord.bordInputContent.value = "";
+        //버튼 눌리면 input태그 비워주기
+        bord.bordInputTitle.value = "";
+        bord.bordInputContent.value = "";
       }
     }
   </script>

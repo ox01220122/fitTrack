@@ -31,7 +31,7 @@ exports.Mwrite = (writeData, callback) => {
       callback(err); // 오류를 콜백으로 전달
       return;
     }
-    //제일 최근 게시글 하나 가져오는 쿼리문 !
+    //제일 최근 게시글 하나 가져오는 쿼리문!
     // query = `SELECT * FROM posts WHERE post_id = (SELECT MAX(post_id) FROM posts WHERE user_id='${writeData.user_id}')`;
     // conn.query(query, (err, rows) => {
     //   if (err) {
@@ -68,3 +68,14 @@ exports.MbestPost = (callback) => {
     callback(rows);
   });
 };
+
+// //전체 post_id, 게시글의 제목,날짜, 시간 가져오기
+// exports.Mlist = (callback) => {
+//   const query = `SELECT post_id, title,created_date,created_time FROM posts ORDER BY post_id DESC `;
+//   conn.query(query, (err, rows) => {
+//     if (err) {
+//       console.log("err:", err);
+//     }
+//     callback(rows);
+//   });
+// };

@@ -145,7 +145,7 @@
       <div class="mainTitle">Fit Track</div>
       <div class="buttonBar">
         <div class="write" onclick="writeButton()">쓰기</div>
-        <div class="list">목록</div>
+        <div class="list" onclick="listButton()">목록</div>
         <div class="search">
           <input
             type="text"
@@ -252,17 +252,20 @@
   </body>
 
   <script>
-    //(function () {})();
     const postBord = document.querySelector(".postBord");
     const write = document.querySelector(".write");
     const list = document.querySelector(".list");
     const writeBord = document.querySelector(".writeBord");
-
+    //localhost:8000/write
     function writeButton() {
-      //write페이지로 이동하기
       window.location.href = "/write";
     }
+    //localhost:8000/list
+    function listButton() {
+      window.location.href = "/list";
+    }
 
+    //localhost:8000/search
     function search() {
       //검색 눌렀을 경우 데이터 베이스에서 일치하는 단어 있는 쿼리문 가져오기
       const searchInput = document.getElementById("search");
@@ -277,13 +280,15 @@
           params: { keyword: searchInput.value }, // 데이터를 params에 담아 전송
         }).then((res) => {
           console.log(
-            "데이터 보내기 성공해서 받은 데이터",
+            "데이터 보내기 성공해서 받은 데이터", //여기 지금 undefined 나옴
             res.data.searchData
           );
           window.location.href = "/search";
         });
       }
     }
+
+    //하트 눌렀을 경우 like_count ++ 해주기
     function clickHeart() {
       const heartIcon = document.querySelector(".fa-heart");
 
@@ -302,6 +307,7 @@
           }
         });
       } else {
+        // 따로 user테이블 만들어서 좋아요 클릭, 좋아요 누른 게시물 post_id저장 해야할듯
         //좋아요 취소
         heartIcon.className = "fa-regular fa-heart fa-xl";
       }

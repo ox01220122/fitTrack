@@ -15,12 +15,30 @@ exports.write = (req, res) => {
   res.render("write");
 };
 
-//GET localhost:8000/list (list페이지 렌더링)
-exports.list = (req, res) => {
-  res.render("list");
+//POST localhost:8000/write
+exports.Cwrite = (req, res) => {
+  userData.Mwrite(req.body, (err, rows) => {
+    console.log("여기는 controller야! model에서 받은 데이터 출력 :", rows[0]);
+    res.send({ result: true });
+  });
 };
 
-//GET localhost:8000/search (serch페이지 렌더링)
+//GET localhost:8000/list
+//(list페이지 렌더링 -> 게시글 전체 보이기에서 list로 바꿔서 보내주기), 데이터 전송
+exports.list = (req, res) => {
+  userData.MsearchAll((searchAllData) => {
+    console.log("리스트안의 '데이터' ! : ", searchAllData);
+    res.render("list", { searchAllData });
+  });
+};
+
+//GET localhost:8000/list/showPost
+//list페이지에서 게시글 클릭 시 경로 이동하여 이미지 포함해서 보여주기
+exports.showPost = (req, res) => {
+  //axios로 데이터 받아온거 사용해서 렌더링 해야한다
+};
+
+//GET localhost:8000/search (serch 페이지 렌더링)
 exports.search = (req, res) => {
   console.log(req.query.keyword);
   userData.Msearch(req.query.keyword, (value) => {
@@ -29,16 +47,7 @@ exports.search = (req, res) => {
   });
 };
 
-//POST localhost:8000/write
-exports.Cwrite = (req, res) => {
-  userData.Mwrite(req.body, (err, rows) => {
-    console.log("여기는 controller야! model에서 받은 데이터 출력 :", rows[0]);
-
-    //res.render("index");
-    res.send({ result: true });
-  });
-};
-
+//POST localhost:8000/search
 exports.Csearch = (req, res) => {
   userData.Msearch(req.body, (rows) => {
     console.log("여기는 controller야! model에서 받은 데이터 출력 :", rows);

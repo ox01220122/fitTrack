@@ -5,12 +5,158 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <style>
+      /* ----------고정 상단바 ---------------------------------------------- */
+      .defaultSetting {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+      }
+
+      .mainTitle {
+        background-color: rgb(182, 182, 182);
+        padding: 20px;
+        text-align: center;
+        font-size: 40px;
+      }
+      .buttonBar {
+        background-color: black;
+        color: white;
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .buttonBar > .write,
+      .buttonBar > .list {
+        padding: 10px;
+        cursor: pointer;
+      }
+      .buttonBar > .search {
+        padding: 10px;
+      }
+
+      .buttonBar > .write:hover,
+      .buttonBar > .list:hover {
+        background-color: white;
+        color: black;
+      }
+
+      /* ----listTopBar------------------------------------------------------- */
+      .listContainer {
+        margin-top: 150px;
+      }
+      .listTopBar {
+        background-color: rgb(124, 173, 155);
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        font-size: 10px;
+      }
+      .listTopBar > .number {
+        width: 10%;
+      }
+      .listTopBar > .title {
+        width: 50%;
+      }
+      .listTopBar > .writer {
+        width: 15%;
+      }
+      .listTopBar > .date {
+        width: 20%;
+      }
+      .listTopBar > .like {
+        width: 5%;
+      }
+
+      /* -------newList-------------------------------------------------- */
+
+      .newList {
+        background-color: rgba(187, 187, 187, 0.364);
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        font-size: 10px;
+      }
+      .newList:hover {
+        background-color: gray;
+        cursor: pointer;
+      }
+      .newList > .newNumber {
+        width: 10%;
+      }
+      .newList > .newTitle {
+        width: 50%;
+      }
+      .newList > .newWriter {
+        width: 15%;
+      }
+      .newList > .newDate {
+        width: 20%;
+      }
+      .newList > .newLike {
+        width: 5%;
+      }
+    </style>
   </head>
   <body>
-    <ol>
-      <li>첫 번째 글</li>
-      <li>두 번째 글</li>
-      <li>세 번째 글</li>
-    </ol>
+    <!-- --------고정 topBar-------------------------------------------- -->
+    <div class="defaultSetting">
+      <div class="mainTitle">Fit Track</div>
+      <div class="buttonBar">
+        <div class="write" onclick="writeButton()">쓰기</div>
+        <div class="list" onclick="mainButton()">TIME LINE</div>
+        <div class="search">
+          <input
+            type="text"
+            class="search"
+            id="search"
+            name="search"
+            autocomplete="off"
+          />
+          <button id="searchButton" onclick="search()">검색</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- --------main---------------------------------------- -->
+
+    <div class="listContainer">
+      <div class="listTopBar">
+        <div class="number">NUMBER</div>
+        <div class="title">TITLE</div>
+        <div class="writer">WRITER</div>
+        <div class="date">DATE</div>
+        <div class="like">LIKE</div>
+      </div>
+
+      <% for (let i = 0; i < searchAllData.length; i++) { %>
+      <div class="newList" onclick="showPost()">
+        <div class="newNumber"><%= searchAllData[i].post_id%></div>
+        <div class="newTitle"><%= searchAllData[i].title%></div>
+        <div class="newWriter"><%= searchAllData[i].user_id%></div>
+        <div class="newDate">
+          <%= searchAllData[i].created_date.toISOString().split('T')[0] %>
+          &nbsp; <% const timeParts = searchAllData[i].created_time.split(':');
+          %> <%= timeParts[0] %>:<%= timeParts[1] %>
+        </div>
+        <div class="newLike"><%= searchAllData[i].like_count%></div>
+      </div>
+      <%}%>
+    </div>
   </body>
+
+  <script>
+    function showPost() {
+      //axios사용해서 데이터 보낸 후 보여줘야할듯
+    }
+
+    function writeButton() {
+      window.location.href = "/write";
+    }
+
+    function mainButton() {
+      window.location.href = "/";
+    }
+  </script>
 </html>
