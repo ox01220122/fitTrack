@@ -1,14 +1,37 @@
 const userData = require("../model");
 
 //GET localhost:8000 (전체 데이터 -> index가 render될 때마다 모든 데이터를 불러와 게시글 창 생성)
+// exports.main = (req, res) => {
+//   userData.MsearchAll((searchAllData) => {
+//     userData.MbestPost((bestPost) => {
+//       userData.MsigninUser((signinUser) => {
+//         res.render("index", { searchAllData, bestPost, signinUser });
+//       });
+//     });
+//   });
+// };
 exports.main = (req, res) => {
-  userData.MsearchAll((searchAllData) => {
-    userData.MbestPost((bestPost) => {
-      userData.MsigninUser((signinUser) => {
-        res.render("index", { searchAllData, bestPost, signinUser });
+  const searchInput = req.query.searchInput; // 쿼리스트링으로 전달된 데이터 가져오기
+
+  if (searchInput) {
+    // searchInput이 존재하는 경우 Msearch 함수 실행
+    userData.Msearch(searchInput, (searchAllData) => {
+      userData.MbestPost((bestPost) => {
+        userData.MsigninUser((signinUser) => {
+          res.render("index", { searchAllData, bestPost, signinUser });
+        });
       });
     });
-  });
+  } else {
+    // searchInput이 존재하지 않는 경우 MsearchAll, MbestPost, MsigninUser 함수 실행
+    userData.MsearchAll((searchAllData) => {
+      userData.MbestPost((bestPost) => {
+        userData.MsigninUser((signinUser) => {
+          res.render("index", { searchAllData, bestPost, signinUser });
+        });
+      });
+    });
+  }
 };
 
 //GET localhost:8000/write
@@ -39,41 +62,32 @@ exports.list = (req, res) => {
 };
 
 //GET localhost:8000/search (serch 페이지 렌더링)
-exports.search = (req, res) => {
-  console.log(req.query.keyword);
-  userData.Msearch(req.query.keyword, (searchData) => {
-    console.log("서치한 결과:", searchData);
-    // const result = value;
-    // res.redirect("search", { searchData });
-    // res.send({ searchData });
-    res.render("search", { searchData });
-  });
-};
+// exports.search = (req, res) => {
+//   console.log("search 테스트", req.query.postIdArr);
+//   userData.Msearch(req.query.searchInput, (searchData) => {
+//     res.render("search", { searchData });
+//   });
+// };
 
-// //POST localhost:8000/search
+// // //POST localhost:8000/search
 // exports.Csearch = (req, res) => {
-//   userData.Msearch(req.body, (rows) => {
-//     res.send({ postData: rows });
+//   userData.Msearch(req.body.keyword, (searchData) => {
+//     res.send({ result: searchData });
 //   });
 // };
 
 //GET localhost:8000/list/showPost
-//list페이지에서 게시글 클릭 시 경로 이동하여 이미지 포함해서 보여주기
-// exports.showPost = (req, res) => {
-//   //axios로 데이터 받아온거 사용해서 렌더링 해야한다
-//   userData.MshowPost(req.query.postId, (showPostData) => {
-//     console.log("서치한 결과:", showPostData);
-//     res.redirect("showPost", { showPostData });
-//   });
-// };
+// list페이지에서 게시글 클릭 시 경로 이동하여 이미지 포함해서 보여주기
 exports.showPost = (req, res) => {
-  res.render("showPost");
+  userData.MshowPost(req.query.postId, (showPostData) => {
+    res.render("showPost", { showPostData });
+  });
 };
 
 //POST localhost:8000/list/showPost
 exports.CshowPost = (req, res) => {
   userData.MshowPost(req.body.postId, (showPostData) => {
     console.log("서치한 결과:", showPostData);
-    res.render("showPost", { showPostData });
+    res.send({ result: showPostData[0].post_id });
   });
 };

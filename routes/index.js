@@ -10,7 +10,7 @@ router.get("/write", controller.write);
 router.post("/write", controller.Cwrite);
 
 //GET localhost:8000/search
-router.get("/search", controller.search);
+// router.get("/search", controller.search);
 //POST localhost:8000/search
 // router.post("/search", controller.Csearch);
 

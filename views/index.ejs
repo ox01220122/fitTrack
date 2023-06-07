@@ -136,7 +136,7 @@
         height: 50%;
         resize: none;
       }
-      .empty_heart {
+      .emptyHeart {
         cursor: auto;
       }
     </style>
@@ -226,10 +226,10 @@
         <!-- 비어있는 하트 -->
         <div class="heartNum">
           <i
-            id="empty_heart"
+            id="emptyHeart-<%= searchAllData[i].post_id%>"
             class="fa-regular fa-heart fa-xl"
             style="color: #db0606"
-            onclick="clickHeart()"
+            onclick="clickHeart(this)"
           ></i>
           <%= searchAllData[i].like_count %>
         </div>
@@ -276,22 +276,34 @@
       if (!searchInput.value) {
         alert("검색어를 입력하세요");
       } else {
-        //검색 페이지 렌더링
-        axios({
-          method: "GET",
-          url: "/search",
-          params: { keyword: searchInput.value }, // 데이터를 params에 담아 전송
-        }).then((res) => {
-          const data = res.data.searchData;
-          console.log("data", data);
-          // window.location.href = "/search?keyword=" + encodeURIComponent(data);
-        });
-        window.location.href = "/search";
+        window.location.href = `/?searchInput=${searchInput.value}`;
+        // axios({
+        //   method: "POST",
+        //   url: "/search",
+        //   data: { keyword: searchInput.value }, // 데이터를 params에 담아 전송
+        // }).then((res) => {
+        //   const result = res.data.result;
+        //   const postIdArr = [];
+        //   for (let i = 0; i < result.length; i++) {
+        //     postIdArr[i] = result[i].post_id;
+        //   }
+
+        //   console.log(postIdArr);
+        //   const queryString = postIdArr
+        //     .map((item) => "postIdArr=" + encodeURIComponent(item))
+        //     .join("&");
+        //   window.location.href = `/search?${queryString}`;
+
+        //   // const queryString = myArray.map(item => 'myArray=' + encodeURIComponent(item)).join('&');
+        // });
       }
     }
 
     //하트 눌렀을 경우 like_count ++ 해주기
     function clickHeart() {
+      const emptyHeartNum = element.id.split("-")[1];
+      console.log("Clicked post_id:", emptyHeartNum);
+      //emptyHeart
       const heartIcon = document.querySelector(".fa-heart");
 
       if (heartIcon.className == "fa-regular fa-heart fa-xl") {

@@ -65,13 +65,11 @@ exports.Mwrite = (writeData) => {
 
 //입력한 단어가 포함된 columns search
 exports.Msearch = (searchData, callback) => {
-  // console.log("model 받아온 데이터 ", searchData);
   const query = `SELECT * FROM posts WHERE title LIKE '%${searchData}%' OR content LIKE '%${searchData}%'`;
   conn.query(query, (err, rows) => {
     if (err) {
       console.log("err:", err);
     }
-    console.log("keyword search data(여기는 model!!) : ", rows);
     callback(rows);
   });
 };

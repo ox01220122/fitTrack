@@ -46,7 +46,7 @@
 
       /* ----listTopBar------------------------------------------------------- */
       .listContainer {
-        margin-top: 150px;
+        margin-top: 180px;
       }
       .listTopBar {
         background-color: rgb(124, 173, 155);
@@ -166,13 +166,11 @@
           postId: postId,
         },
       }).then((res) => {
-        if (res.data.showPostData) {
-          alert("완료");
-          // window.location.href = "/list/showPost";
+        console.log(res.data.result);
 
-          // const showPostData = res.data.showPostData;
-          // window.location.href =
-          //   "/list/showPost?keyword=" + encodeURIComponent(showPostData);
+        if (res.data.result) {
+          alert("완료");
+          window.location.href = `/list/showPost?postId=${res.data.result}`;
         }
       });
     }

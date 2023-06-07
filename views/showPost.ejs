@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://kit.fontawesome.com/693f483c38.js"
+      crossorigin="anonymous"
+    ></script>
     <title>Document</title>
     <style>
       .defaultSetting {
@@ -19,23 +23,105 @@
         text-align: center;
         font-size: 40px;
       }
+      .container {
+        margin-top: 130px;
+      }
+      .container > .backBar {
+        display: flex;
+        background-color: rgb(227, 227, 227);
+      }
+      .backBar > .backList {
+        display: inline;
+        background-color: black;
+        color: white;
+      }
+      .backBar > .backList:hover {
+        cursor: pointer;
+        background-color: rgb(124, 173, 155);
+        color: black;
+      }
+
+      .topContainer {
+        display: flex;
+        background-color: beige;
+        font-size: 15px;
+      }
+
+      .topContainer > .postId {
+        width: 60%;
+      }
+
+      .topContainer > .userId {
+        width: 15%;
+      }
+      .topContainer > .date {
+        width: 20%;
+      }
+      .topContainer > .likeCount {
+        width: 5%;
+      }
+
+      .titleContainer {
+        background-color: rgb(121, 215, 215);
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .constentContainer {
+        background-color: black;
+        margin: 0px;
+      }
+
+      .constent {
+        color: white;
+        height: 100px;
+        margin-top: 30px;
+        margin-left: 30px;
+        margin-right: 30px;
+      }
     </style>
   </head>
   <body>
     <div class="defaultSetting">
       <div class="mainTitle">Fit Track</div>
     </div>
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <%= showPostData[0].user_id%>
+
+    <div class="container">
+      <div class="backBar">
+        <div class="backList" onclick="backList()">list</div>
+        <div>&nbsp; > &nbsp;</div>
+        <div><%= showPostData[0].title %>(나중에 카테고리로 바꾸기)</div>
+      </div>
+
+      <div class="titleContainer">
+        <div class="title"><%= showPostData[0].title %></div>
+      </div>
+
+      <div class="topContainer">
+        <div class="postId"><%= showPostData[0].post_id %></div>
+        <div class="userId"><%= showPostData[0].user_id %></div>
+        <div class="date">
+          <%= showPostData[0].created_date.toISOString().split('T')[0] %> &nbsp;
+          <% const timeParts = showPostData[0].created_time.split(':'); %> <%=
+          timeParts[0] %>:<%= timeParts[1] %>
+        </div>
+        <div class="likeCount">
+          <i class="fa-solid fa-heart fa-2xs" style="color: #ff0000"></i><%=
+          showPostData[0].like_count %>
+        </div>
+      </div>
+
+      <div class="constentContainer">
+        <div class="constent"><%= showPostData[0].content %></div>
+      </div>
+    </div>
   </body>
+
+  <script>
+    function backList() {
+      window.location.href = "/list";
+    }
+  </script>
 </html>
