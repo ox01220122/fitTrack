@@ -276,7 +276,7 @@
       if (!searchInput.value) {
         alert("검색어를 입력하세요");
       } else {
-        window.location.href = `/?searchInput=${searchInput.value}`;
+        window.location.href = `/search?searchInput=${searchInput.value}`;
         // axios({
         //   method: "POST",
         //   url: "/search",
@@ -287,14 +287,12 @@
         //   for (let i = 0; i < result.length; i++) {
         //     postIdArr[i] = result[i].post_id;
         //   }
-
         //   console.log(postIdArr);
         //   const queryString = postIdArr
         //     .map((item) => "postIdArr=" + encodeURIComponent(item))
         //     .join("&");
         //   window.location.href = `/search?${queryString}`;
-
-        //   // const queryString = myArray.map(item => 'myArray=' + encodeURIComponent(item)).join('&');
+        // const queryString = myArray.map(item => 'myArray=' + encodeURIComponent(item)).join('&');
         // });
       }
     }

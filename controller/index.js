@@ -1,38 +1,49 @@
 const userData = require("../model");
 
-//GET localhost:8000 (전체 데이터 -> index가 render될 때마다 모든 데이터를 불러와 게시글 창 생성)
+// GET localhost:8000 (전체 데이터 -> index가 render될 때마다 모든 데이터를 불러와 게시글 창 생성)
+exports.main = (req, res) => {
+  userData.MsearchAll((searchAllData) => {
+    userData.MbestPost((bestPost) => {
+      userData.MsigninUser((signinUser) => {
+        res.render("index", { searchAllData, bestPost, signinUser });
+      });
+    });
+  });
+};
+
 // exports.main = (req, res) => {
-//   userData.MsearchAll((searchAllData) => {
-//     userData.MbestPost((bestPost) => {
-//       userData.MsigninUser((signinUser) => {
-//         res.render("index", { searchAllData, bestPost, signinUser });
+//   const searchInput = req.query.searchInput;
+
+//   if (searchInput) {
+//     // searchInput이 존재하는 경우 Msearch 함수 실행
+//     userData.Msearch(searchInput, (searchAllData) => {
+//       userData.MbestPost((bestPost) => {
+//         userData.MsigninUser((signinUser) => {
+//           res.render("index", {
+//             searchAllData,
+//             bestPost,
+//             signinUser,
+//             msg: true,
+//           });
+//         });
 //       });
 //     });
-//   });
+//   } else {
+//     // searchInput이 존재하지 않는 경우 MsearchAll, MbestPost, MsigninUser 함수 실행
+//     userData.MsearchAll((searchAllData) => {
+//       userData.MbestPost((bestPost) => {
+//         userData.MsigninUser((signinUser) => {
+//           res.render("index", {
+//             searchAllData,
+//             bestPost,
+//             signinUser,
+//             msg: false,
+//           });
+//         });
+//       });
+//     });
+//   }
 // };
-exports.main = (req, res) => {
-  const searchInput = req.query.searchInput; // 쿼리스트링으로 전달된 데이터 가져오기
-
-  if (searchInput) {
-    // searchInput이 존재하는 경우 Msearch 함수 실행
-    userData.Msearch(searchInput, (searchAllData) => {
-      userData.MbestPost((bestPost) => {
-        userData.MsigninUser((signinUser) => {
-          res.render("index", { searchAllData, bestPost, signinUser });
-        });
-      });
-    });
-  } else {
-    // searchInput이 존재하지 않는 경우 MsearchAll, MbestPost, MsigninUser 함수 실행
-    userData.MsearchAll((searchAllData) => {
-      userData.MbestPost((bestPost) => {
-        userData.MsigninUser((signinUser) => {
-          res.render("index", { searchAllData, bestPost, signinUser });
-        });
-      });
-    });
-  }
-};
 
 //GET localhost:8000/write
 exports.write = (req, res) => {
@@ -62,12 +73,12 @@ exports.list = (req, res) => {
 };
 
 //GET localhost:8000/search (serch 페이지 렌더링)
-// exports.search = (req, res) => {
-//   console.log("search 테스트", req.query.postIdArr);
-//   userData.Msearch(req.query.searchInput, (searchData) => {
-//     res.render("search", { searchData });
-//   });
-// };
+exports.search = (req, res) => {
+  console.log("search 테스트", req.query.postIdArr);
+  userData.Msearch(req.query.searchInput, (searchData) => {
+    res.render("search", { searchData });
+  });
+};
 
 // // //POST localhost:8000/search
 // exports.Csearch = (req, res) => {
