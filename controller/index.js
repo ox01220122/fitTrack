@@ -33,29 +33,47 @@ exports.Cwrite = (req, res) => {
 //(list페이지 렌더링 -> 게시글 전체 보이기에서 list로 바꿔서 보내주기), 데이터 전송
 exports.list = (req, res) => {
   userData.MsearchAll((searchAllData) => {
-    console.log("리스트안의 '데이터' ! : ", searchAllData);
+    // console.log("리스트안의 '데이터' ! : ", searchAllData);
     res.render("list", { searchAllData });
   });
-};
-
-//GET localhost:8000/list/showPost
-//list페이지에서 게시글 클릭 시 경로 이동하여 이미지 포함해서 보여주기
-exports.showPost = (req, res) => {
-  //axios로 데이터 받아온거 사용해서 렌더링 해야한다
 };
 
 //GET localhost:8000/search (serch 페이지 렌더링)
 exports.search = (req, res) => {
   console.log(req.query.keyword);
-  userData.Msearch(req.query.keyword, (value) => {
-    const result = value;
-    res.render("search", { searchData: result });
+  userData.Msearch(req.query.keyword, (searchData) => {
+    console.log("서치한 결과:", searchData);
+    // const result = value;
+    // res.redirect("search", { searchData });
+    // res.send({ searchData });
+    res.render("search", { searchData });
   });
 };
 
-//POST localhost:8000/search
-exports.Csearch = (req, res) => {
-  userData.Msearch(req.body, (rows) => {
-    res.send({ postData: rows });
+// //POST localhost:8000/search
+// exports.Csearch = (req, res) => {
+//   userData.Msearch(req.body, (rows) => {
+//     res.send({ postData: rows });
+//   });
+// };
+
+//GET localhost:8000/list/showPost
+//list페이지에서 게시글 클릭 시 경로 이동하여 이미지 포함해서 보여주기
+// exports.showPost = (req, res) => {
+//   //axios로 데이터 받아온거 사용해서 렌더링 해야한다
+//   userData.MshowPost(req.query.postId, (showPostData) => {
+//     console.log("서치한 결과:", showPostData);
+//     res.redirect("showPost", { showPostData });
+//   });
+// };
+exports.showPost = (req, res) => {
+  res.render("showPost");
+};
+
+//POST localhost:8000/list/showPost
+exports.CshowPost = (req, res) => {
+  userData.MshowPost(req.body.postId, (showPostData) => {
+    console.log("서치한 결과:", showPostData);
+    res.render("showPost", { showPostData });
   });
 };

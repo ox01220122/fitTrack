@@ -65,6 +65,7 @@ exports.Mwrite = (writeData) => {
 
 //입력한 단어가 포함된 columns search
 exports.Msearch = (searchData, callback) => {
+  // console.log("model 받아온 데이터 ", searchData);
   const query = `SELECT * FROM posts WHERE title LIKE '%${searchData}%' OR content LIKE '%${searchData}%'`;
   conn.query(query, (err, rows) => {
     if (err) {
@@ -75,13 +76,13 @@ exports.Msearch = (searchData, callback) => {
   });
 };
 
-// //전체 post_id, 게시글의 제목,날짜, 시간 가져오기
-// exports.Mlist = (callback) => {
-//   const query = `SELECT post_id, title,created_date,created_time FROM posts ORDER BY post_id DESC `;
-//   conn.query(query, (err, rows) => {
-//     if (err) {
-//       console.log("err:", err);
-//     }
-//     callback(rows);
-//   });
-// };
+exports.MshowPost = (postIdData, callback) => {
+  const query = `SELECT * FROM posts WHERE post_id = ${postIdData}`;
+  conn.query(query, (err, rows) => {
+    if (err) {
+      console.log("err:", err);
+    }
+    console.log("post_id일치 데이터 : ", rows);
+    callback(rows);
+  });
+};

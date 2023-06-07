@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <title>Document</title>
     <style>
       /* ----------고정 상단바 ---------------------------------------------- */
@@ -133,7 +134,11 @@
       </div>
 
       <% for (let i = 0; i < searchAllData.length; i++) { %>
-      <div class="newList" onclick="showPost()">
+      <div
+        class="newList"
+        id="newList-<%= searchAllData[i].post_id%>"
+        onclick="showPost(this)"
+      >
         <div class="newNumber"><%= searchAllData[i].post_id%></div>
         <div class="newTitle"><%= searchAllData[i].title%></div>
         <div class="newWriter"><%= searchAllData[i].user_id%></div>
@@ -149,19 +154,25 @@
   </body>
 
   <script>
-    function showPost() {
+    function showPost(element) {
+      const postId = element.id.split("-")[1];
+      console.log("Clicked post_id:", postId);
+      //클릭한 게시물 크게 보여주기 (댓글과 함께)
+
       axios({
-        method: "GET",
+        method: "POST",
         url: "/list/showPost",
-        params: {
-          id: form.id.value,
-          userid: form.userid.value,
-          name: form.username.value,
-          pw: form.pw.value,
+        data: {
+          postId: postId,
         },
       }).then((res) => {
-        if (res.data.result) {
-          alert("회원정보 수정완료!!!");
+        if (res.data.showPostData) {
+          alert("완료");
+          // window.location.href = "/list/showPost";
+
+          // const showPostData = res.data.showPostData;
+          // window.location.href =
+          //   "/list/showPost?keyword=" + encodeURIComponent(showPostData);
         }
       });
     }
@@ -175,6 +186,7 @@
     }
 
     function mypostButton() {
+      // 내 게시물 눌렀을 때 게시물 띄우고 수정, 삭제 가능하게
       axios({
         method: "GET",
         url: "/list/showPost",

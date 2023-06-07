@@ -282,12 +282,11 @@
           url: "/search",
           params: { keyword: searchInput.value }, // 데이터를 params에 담아 전송
         }).then((res) => {
-          console.log(
-            "데이터 보내기 성공해서 받은 데이터", //여기 지금 undefined 나옴
-            res.data.searchData
-          );
-          window.location.href = "/search";
+          const data = res.data.searchData;
+          console.log("data", data);
+          // window.location.href = "/search?keyword=" + encodeURIComponent(data);
         });
+        window.location.href = "/search";
       }
     }
 
@@ -300,15 +299,15 @@
         heartIcon.className = "fa-solid fa-heart fa-xl";
         heartIcon.style.color = "#ff0000";
 
-        axios({
-          method: "PATCH",
-          url: "/user/profile/edit",
-          data: { like_count: form.id.value },
-        }).then((res) => {
-          if (res.data.result) {
-            alert("회원정보 수정완료!!!");
-          }
-        });
+        // axios({
+        //   method: "PATCH",
+        //   url: "/user/profile/edit",
+        //   data: { like_count: form.id.value },
+        // }).then((res) => {
+        //   if (res.data.result) {
+        //     alert("회원정보 수정완료!!!");
+        //   }
+        // });
       } else {
         // 따로 user테이블 만들어서 좋아요 클릭, 좋아요 누른 게시물 post_id저장 해야할듯
         //좋아요 취소
