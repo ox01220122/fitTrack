@@ -28,7 +28,7 @@ router.get("/list/showPost", controller.showPost);
 router.post("/list/showPost", controller.CshowPost);
 
 //GET localhost:8000/myPost
-router.get("/myPost", controller.CmyPost);
+router.get("/myPost", controller.myPost);
 
 //모듈사용
 module.exports = router;

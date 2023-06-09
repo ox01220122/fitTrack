@@ -161,7 +161,8 @@
       const postId = element.id.split("-")[1];
       console.log("Clicked post_id:", postId);
       //클릭한 게시물 크게 보여주기 (댓글과 함께)
-      window.location.href = `/list/showPost?postId=${postId}`;
+      const signinId = "<%= signinUser[0].signin_id %>";
+      window.location.href = `/myPost?signinId=${signinId}`;
     }
 
     function writeButton() {
@@ -172,6 +173,9 @@
       window.location.href = "/";
     }
 
-    function mypostButton() {}
+    function mypostButton() {
+      const signinId = "<%= signinUser[0].signin_id %>";
+      window.location.href = `/myPost?signinId=${signinId}`;
+    }
   </script>
 </html>

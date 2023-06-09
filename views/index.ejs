@@ -290,7 +290,7 @@
     <% } %> <% } %>
   </body>
   <script>
-    console.log("<%= signinUser[0].signin_id%>");
+    // console.log("<%= signinUser[0].signin_id%>");
     const postBord = document.querySelector(".postBord");
     const write = document.querySelector(".write");
     const list = document.querySelector(".list");
@@ -373,11 +373,13 @@
     }
 
     function mypostButton() {
-      //내 게시물 모아보기
-      window.location.href = `/myPost?signinId=<%= signinUser[0].signin_id%>`;
+      //내 게시물 모아보기(쿼리스트링으로 로그인한 user의 signin_id보냄)
+      const signinId = "<%= signinUser[0].signin_id %>";
+      window.location.href = `/myPost?signinId=${signinId}`;
     }
 
     // comment_id, post_id, author_id, content, created_date
+    //댓글 쓰기
     function clickSendButton(element) {
       //게시글의 post_id
       const commentPostNum = element.id.split("-")[1];

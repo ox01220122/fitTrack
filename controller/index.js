@@ -78,9 +78,26 @@ exports.Cwrite = (req, res) => {
 // ---------------------------------------------------------------------------------------------
 
 //GET localhost:8000/list
-exports.list = (req, res) => {
-  userData.MsearchAll((searchAllData) => {
-    res.render("list", { searchAllData });
+exports.list = async (req, res) => {
+  const PsearchAllData = new Promise((resolve, reject) => {
+    userData.MsearchAll((searchAllData) => {
+      resolve(searchAllData);
+    });
+  });
+  const PsigninUser = new Promise((resolve, reject) => {
+    userData.MsigninUser((signinUser) => {
+      resolve(signinUser);
+    });
+  });
+
+  const [searchAllData, signinUser] = await Promise.all([
+    PsearchAllData,
+    PsigninUser,
+  ]);
+
+  await res.render("list", {
+    searchAllData: searchAllData,
+    signinUser: signinUser,
   });
 };
 // ---------------------------------------------------------------------------------------------
@@ -138,7 +155,7 @@ exports.CshowPost = (req, res) => {
 // ---------------------------------------------------------------------------------------------
 
 //GET localhost:8000/myPost
-exports.CmyPost = (req, res) => {
+exports.myPost = (req, res) => {
   userData.MmyPost(req.query.signinId, (myPostData) => {
     res.render("myPost", { myPostData });
   });
