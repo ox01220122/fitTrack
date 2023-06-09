@@ -91,19 +91,57 @@ exports.search = (req, res) => {
 // ---------------------------------------------------------------------------------------------
 
 //GET localhost:8000/list/showPost
-exports.showPost = (req, res) => {
-  userData.MshowPost(req.query.postId, (showPostData) => {
-    res.render("showPost", { showPostData });
+// 게시글 데이터, 게시글의 댓글 데이터 가져오기
+exports.showPost = async (req, res) => {
+  const PshowPost = new Promise((resolve, reject) => {
+    userData.MshowPost(req.query.postId, (showPostData) => {
+      resolve(showPostData);
+    });
+  });
+
+  const PshowPostComment = new Promise((resolve, reject) => {
+    userData.MshowPostComment(req.query.postId, (showPostCommentData) => {
+      resolve(showPostCommentData);
+    });
+  });
+
+  const [showPostData, showPostCommentData] = await Promise.all([
+    PshowPost,
+    PshowPostComment,
+  ]);
+
+  await res.render("showPost", {
+    showPostData: showPostData,
+    showPostCommentData: showPostCommentData,
   });
 };
 
 //POST localhost:8000/list/showPost
+// exports.CshowPost = (req, res) => {
+//   //true = list-> showPost ->댓글 업로드
+//   if (req.body.msg === true) {
+//     //댓글 추가 동작까지
+//     console.log("여기는 true");
+//     userData.writeComment(req.body);
+//     userData.MshowPost(req.body.post_id, (showPostData) => {
+//       res.send({ result: showPostData[0].post_id });
+//     });
+//   } else if (req.body.msg === false) {
+//     //false = index -> showPost ->댓글 업로드
+//     console.log("여기는 false");
+//     userData.MshowPost(req.body.post_id, (showPostData) => {
+//       res.send({ result: showPostData[0].post_id });
+//     });
+//   }
+// };
+
 exports.CshowPost = (req, res) => {
-  userData.MshowPost(req.body.postId, (showPostData) => {
-    console.log("서치한 결과:", showPostData);
+  userData.writeComment(req.body);
+  userData.MshowPost(req.body.post_id, (showPostData) => {
     res.send({ result: showPostData[0].post_id });
   });
 };
+
 // ---------------------------------------------------------------------------------------------
 
 //GET localhost:8000/myPost

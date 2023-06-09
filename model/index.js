@@ -71,12 +71,23 @@ exports.Msearch = (searchData, callback) => {
 
 //클릭한 게시물 데이터 가져오기
 exports.MshowPost = (postIdData, callback) => {
-  const query = `SELECT * FROM posts WHERE post_id = ${postIdData}`;
+  const query = `SELECT * FROM posts WHERE post_id = ${postIdData} ORDER BY post_id DESC`;
   conn.query(query, (err, rows) => {
     if (err) {
       console.log("err:", err);
     }
     console.log("post_id일치 데이터 : ", rows);
+    callback(rows);
+  });
+};
+//클릭한 게시물 댓글 데이터 가져오기
+exports.MshowPostComment = (postIdData, callback) => {
+  const query = `SELECT * FROM comments WHERE post_id = ${postIdData} ORDER BY post_id DESC`;
+  conn.query(query, (err, rows) => {
+    if (err) {
+      console.log("err:", err);
+    }
+    console.log("post_id일치 댓글 데이터 : ", rows);
     callback(rows);
   });
 };
@@ -121,6 +132,7 @@ exports.MpatchLikeCount = (postIdData, callback) => {
   });
 };
 
+//로그인한 사용자의 게시물 가져오기
 exports.MmyPost = (signIdData, callback) => {
   const query = `SELECT * FROM posts WHERE user_id = '${signIdData}' ORDER BY post_id DESC`;
   conn.query(query, (err, rows) => {

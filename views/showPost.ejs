@@ -8,6 +8,7 @@
       src="https://kit.fontawesome.com/693f483c38.js"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <title>Document</title>
     <style>
       .defaultSetting {
@@ -24,7 +25,7 @@
         font-size: 40px;
       }
       .container {
-        margin-top: 130px;
+        margin-top: 100px;
       }
       .container > .backBar {
         display: flex;
@@ -32,13 +33,18 @@
       }
       .backBar > .backList {
         display: inline;
-        background-color: black;
-        color: white;
       }
       .backBar > .backList:hover {
         cursor: pointer;
-        background-color: rgb(124, 173, 155);
-        color: black;
+      }
+
+      .titleContainer {
+        background-color: rgb(0, 0, 0);
+        color: white;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
 
       .topContainer {
@@ -48,38 +54,55 @@
       }
 
       .topContainer > .postId {
-        width: 60%;
+        width: 40%;
       }
-
       .topContainer > .userId {
-        width: 15%;
+        width: 13%;
       }
       .topContainer > .date {
-        width: 20%;
+        display: flex;
+        align-items: center;
+        width: 42%;
       }
       .topContainer > .likeCount {
+        display: flex;
+        align-items: center;
         width: 5%;
       }
 
-      .titleContainer {
-        background-color: rgb(121, 215, 215);
-        height: 50px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
       .constentContainer {
-        background-color: black;
-        margin: 0px;
+        background-color: rgb(28, 38, 223);
       }
 
       .constent {
         color: white;
         height: 100px;
-        margin-top: 30px;
+        padding-top: 30px;
+        padding-bottom: 100%;
         margin-left: 30px;
         margin-right: 30px;
+      }
+
+      /* --------댓글------------------------------------------------------------------- */
+      .commentContainer {
+        /* 댓글 전체 css지정 */
+      }
+
+      .writeComment {
+        display: flex;
+        align-items: center;
+        resize: none;
+      }
+
+      .bordInputComment {
+        width: 90%;
+        resize: none;
+        /* overflow: hidden; */
+      }
+
+      .showComment {
+        display: flex;
+        align-items: center;
       }
     </style>
   </head>
@@ -92,7 +115,7 @@
       <div class="backBar">
         <div class="backList" onclick="backList()">list</div>
         <div>&nbsp; > &nbsp;</div>
-        <div><%= showPostData[0].title %>(나중에 카테고리로 바꾸기)</div>
+        <div>Post</div>
       </div>
 
       <div class="titleContainer">
@@ -116,12 +139,92 @@
       <div class="constentContainer">
         <div class="constent"><%= showPostData[0].content %></div>
       </div>
+      <hr />
+
+      <div class="commentContainer">
+        <div class="writeComment">
+          <form name="sendForm" id="sendForm">
+            <textarea
+              rows="1"
+              cols="50"
+              class="bordInputComment"
+              id="bordInputComment"
+              name="bordInputComment"
+              placeholder="Comment"
+            ></textarea>
+
+            <!-- 전송버튼 -->
+            <i
+              class="fa-regular fa-paper-plane fa-lg"
+              style="color: #000000"
+              id="sendButton"
+              onclick="clickSendButton()"
+            ></i>
+          </form>
+        </div>
+        <hr />
+
+        <% if(showPostCommentData.length == 0 ){%>
+        <span>NO COMMENTS</span>
+        <hr />
+        <%}%> <% for (let i = 0; i < showPostCommentData.length; i++) { %>
+        <div class="showComment">
+          <i class="fa-solid fa-user fa-lg" style="color: #000000"></i>
+          &nbsp;&nbsp;
+          <div class="signin_user_id">
+            <%= showPostCommentData[i].signin_user_id%>
+          </div>
+          <span>&nbsp; : &nbsp;</span>
+          <div class="content"><%= showPostCommentData[i].content%></div>
+        </div>
+        <br />
+        <hr />
+        <%}%>
+      </div>
     </div>
   </body>
 
   <script>
     function backList() {
       window.location.href = "/list";
+    }
+
+    //전송 클릭했을 경우 데이터베이스에 댓글 저장, 새로고침으로 댓글 추가
+    function clickSendButton() {
+      const Sendbord = document.forms["sendForm"];
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = today.getMonth() + 1;
+      const day = today.getDate();
+      const created_date = `${year}-${month}-${day}`;
+
+      const now = new Date();
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      created_time = `${hours}:${minutes}`;
+
+      if (Sendbord.bordInputComment.value != "") {
+        const commentData = {
+          post_id: "<%= showPostCommentData[0].post_id%>",
+          signin_user_id: "<%= showPostCommentData[0].signin_user_id%>",
+          content: Sendbord.bordInputComment.value,
+          created_date: created_date,
+          created_time: created_time,
+          msg: true,
+        };
+        axios({
+          method: "POST",
+          url: "/list/showPost",
+          data: commentData,
+        });
+        //댓글 업로드 후 새로고침(GET방식 실행)
+        alert("댓글 업로드");
+        Sendbord.bordInputComment.value = "";
+        window.location.href =
+          "/list/showPost?postId=<%= showPostCommentData[0].post_id%>";
+      } else {
+        alert("댓글을 작성해주세요");
+      }
     }
   </script>
 </html>

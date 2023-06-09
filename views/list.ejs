@@ -161,20 +161,7 @@
       const postId = element.id.split("-")[1];
       console.log("Clicked post_id:", postId);
       //클릭한 게시물 크게 보여주기 (댓글과 함께)
-
-      axios({
-        method: "POST",
-        url: "/list/showPost",
-        data: {
-          postId: postId,
-        },
-      }).then((res) => {
-        console.log(res.data.result);
-
-        if (res.data.result) {
-          window.location.href = `/list/showPost?postId=${res.data.result}`;
-        }
-      });
+      window.location.href = `/list/showPost?postId=${postId}`;
     }
 
     function writeButton() {
@@ -187,20 +174,20 @@
 
     function mypostButton() {
       // 내 게시물 눌렀을 때 게시물 띄우고 수정, 삭제 가능하게
-      axios({
-        method: "GET",
-        url: "/list/showPost",
-        params: {
-          id: form.id.value,
-          userid: form.userid.value,
-          name: form.username.value,
-          pw: form.pw.value,
-        },
-      }).then((res) => {
-        if (res.data.result) {
-          alert("회원정보 수정완료!!!");
-        }
-      });
+      // axios({
+      //   method: "GET",
+      //   url: "/myPost",
+      //   params: {
+      //     id: form.id.value,
+      //     userid: form.userid.value,
+      //     name: form.username.value,
+      //     pw: form.pw.value,
+      //   },
+      // }).then((res) => {
+      //   if (res.data.result) {
+      //     alert("회원정보 수정완료!!!");
+      //   }
+      // });
     }
   </script>
 </html>
