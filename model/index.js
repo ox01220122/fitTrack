@@ -11,9 +11,6 @@ const conn = mysql.createConnection({
 exports.MsearchAll = (callback) => {
   const query = `SELECT * FROM posts ORDER BY post_id DESC `;
   conn.query(query, (err, rows) => {
-    if (err) {
-      console.log("err:", err);
-    }
     callback(rows);
   });
 };
@@ -22,9 +19,6 @@ exports.MsearchAll = (callback) => {
 exports.MsigninUser = (callback) => {
   const query = `SELECT * FROM signin_user `;
   conn.query(query, (err, rows) => {
-    if (err) {
-      console.log("err:", err);
-    }
     callback(rows);
   });
 };
@@ -33,9 +27,6 @@ exports.MsigninUser = (callback) => {
 exports.MbestPost = (callback) => {
   const query = `SELECT title, like_count  FROM posts ORDER BY like_count DESC LIMIT 3`;
   conn.query(query, (err, rows) => {
-    if (err) {
-      console.log("err:", err);
-    }
     callback(rows);
   });
 };
@@ -43,15 +34,11 @@ exports.MbestPost = (callback) => {
 exports.McommentAll = (callback) => {
   const query = `SELECT * FROM comments ORDER BY post_id DESC`;
   conn.query(query, (err, rows) => {
-    if (err) {
-      console.log("err:", err);
-    }
     callback(rows);
   });
 };
 
 exports.Mwrite = (writeData) => {
-  //형식 안맞아서 저장오류 날 일 없음. 그래서 오류처리 생략.
   const query = `INSERT INTO posts (user_id, title, content, created_date, created_time, like_count) VALUES 
     ('${writeData.user_id}', '${writeData.title}', '${writeData.content}', '${writeData.created_date}',
     '${writeData.created_time}', '${writeData.like_count}')`;
@@ -62,20 +49,14 @@ exports.Mwrite = (writeData) => {
 exports.Msearch = (searchData, callback) => {
   const query = `SELECT * FROM posts WHERE title LIKE '%${searchData}%' OR content LIKE '%${searchData}%'`;
   conn.query(query, (err, rows) => {
-    if (err) {
-      console.log("err:", err);
-    }
     callback(rows);
   });
 };
 
 //클릭한 게시물 데이터 가져오기
 exports.MshowPost = (postIdData, callback) => {
-  const query = `SELECT * FROM posts WHERE post_id = ${postIdData} ORDER BY post_id DESC`;
+  const query = `SELECT * FROM posts WHERE post_id = ${postIdData}`;
   conn.query(query, (err, rows) => {
-    if (err) {
-      console.log("err:", err);
-    }
     console.log("post_id일치 데이터 : ", rows);
     callback(rows);
   });
@@ -84,9 +65,6 @@ exports.MshowPost = (postIdData, callback) => {
 exports.MshowPostComment = (postIdData, callback) => {
   const query = `SELECT * FROM comments WHERE post_id = ${postIdData} ORDER BY post_id DESC`;
   conn.query(query, (err, rows) => {
-    if (err) {
-      console.log("err:", err);
-    }
     console.log("post_id일치 댓글 데이터 : ", rows);
     callback(rows);
   });
@@ -96,9 +74,6 @@ exports.MshowPostComment = (postIdData, callback) => {
 exports.MmyPost = (userIdData, callback) => {
   const query = `SELECT * FROM posts WHERE user_id = ${userIdData}`;
   conn.query(query, (err, rows) => {
-    if (err) {
-      console.log("err:", err);
-    }
     console.log("post_id일치 데이터 : ", rows);
     callback(rows);
   });
@@ -134,7 +109,7 @@ exports.MpatchLikeCount = (postIdData, callback) => {
 
 //로그인한 사용자의 게시물 가져오기
 exports.MmyPost = (signIdData, callback) => {
-  const query = `SELECT * FROM posts WHERE user_id = '${signIdData}' ORDER BY post_id DESC`;
+  const query = `SELECT * FROM posts WHERE user_id = '${signIdData}'`;
   conn.query(query, (err, rows) => {
     if (err) {
       console.log("err:", err);

@@ -3,22 +3,26 @@ const userData = require("../model");
 // GET localhost:8000
 // 가져오는 데이터: 전체데이터, best3 데이터, 로그인 유저 데이터, 댓글 데이터
 exports.main = async (req, res) => {
+  //전체 데이터
   const searchAllDataPromise = new Promise((resolve, reject) => {
     userData.MsearchAll((searchResult) => {
       resolve(searchResult);
     });
   });
   const bestPostPromise = new Promise((resolve, reject) => {
+    //best3 게시물 데이터
     userData.MbestPost((bestPost) => {
       resolve(bestPost);
     });
   });
   const signinUserPromise = new Promise((resolve, reject) => {
+    //로그인한 사용자의 데이터
     userData.MsigninUser((signinUser) => {
       resolve(signinUser);
     });
   });
   const commentAllDataPromise = new Promise((resolve, reject) => {
+    //전체 댓글 정보
     userData.McommentAll((commentAllData) => {
       resolve(commentAllData);
     });
@@ -91,50 +95,39 @@ exports.search = (req, res) => {
 // ---------------------------------------------------------------------------------------------
 
 //GET localhost:8000/list/showPost
-// 게시글 데이터, 게시글의 댓글 데이터 가져오기
+// 게시글 데이터, 게시글의 댓글 데이터,로그인 user(쿼리스트링으로 postId보냄)
 exports.showPost = async (req, res) => {
   const PshowPost = new Promise((resolve, reject) => {
-    userData.MshowPost(req.query.postId, (showPostData) => {
-      resolve(showPostData);
+    userData.MshowPost(req.query.postId, (showPost) => {
+      resolve(showPost);
     });
   });
 
   const PshowPostComment = new Promise((resolve, reject) => {
-    userData.MshowPostComment(req.query.postId, (showPostCommentData) => {
-      resolve(showPostCommentData);
+    userData.MshowPostComment(req.query.postId, (showPostComment) => {
+      resolve(showPostComment);
     });
   });
 
-  const [showPostData, showPostCommentData] = await Promise.all([
+  const PsigninUser = new Promise((resolve, reject) => {
+    userData.MsigninUser((signinUser) => {
+      resolve(signinUser);
+    });
+  });
+
+  const [showPost, showPostComment, signinUser] = await Promise.all([
     PshowPost,
     PshowPostComment,
+    PsigninUser,
   ]);
-
   await res.render("showPost", {
-    showPostData: showPostData,
-    showPostCommentData: showPostCommentData,
+    showPost: showPost,
+    showPostComment: showPostComment,
+    signinUser: signinUser,
   });
 };
 
 //POST localhost:8000/list/showPost
-// exports.CshowPost = (req, res) => {
-//   //true = list-> showPost ->댓글 업로드
-//   if (req.body.msg === true) {
-//     //댓글 추가 동작까지
-//     console.log("여기는 true");
-//     userData.writeComment(req.body);
-//     userData.MshowPost(req.body.post_id, (showPostData) => {
-//       res.send({ result: showPostData[0].post_id });
-//     });
-//   } else if (req.body.msg === false) {
-//     //false = index -> showPost ->댓글 업로드
-//     console.log("여기는 false");
-//     userData.MshowPost(req.body.post_id, (showPostData) => {
-//       res.send({ result: showPostData[0].post_id });
-//     });
-//   }
-// };
-
 exports.CshowPost = (req, res) => {
   userData.writeComment(req.body);
   userData.MshowPost(req.body.post_id, (showPostData) => {

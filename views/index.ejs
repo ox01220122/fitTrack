@@ -290,6 +290,7 @@
     <% } %> <% } %>
   </body>
   <script>
+    console.log("<%= signinUser[0].signin_id%>");
     const postBord = document.querySelector(".postBord");
     const write = document.querySelector(".write");
     const list = document.querySelector(".list");
@@ -318,9 +319,9 @@
 
     //댓글 아이콘 눌렀을 때 페이지 이동
     function clickComment(element) {
-      const commentPostId = element.id.split("-")[1];
-      console.log("Clicked post_id:", commentPostId);
-      window.location.href = `/list/showPost?postId=${commentPostId}`;
+      const postId = element.id.split("-")[1];
+      console.log("Clicked post_id:", postId);
+      window.location.href = `/list/showPost?postId=${postId}`;
     }
 
     //하트 눌렀을 경우 like_count ++ 해주기
@@ -339,7 +340,7 @@
         heartIcon.classList.remove("fa-regular");
         heartIcon.classList.add("fa-solid");
 
-        //함수화 하기
+        //함수화 하기!!!
         axios({
           method: "PATCH",
           url: "/",

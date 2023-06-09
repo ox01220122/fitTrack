@@ -119,25 +119,25 @@
       </div>
 
       <div class="titleContainer">
-        <div class="title"><%= showPostData[0].title %></div>
+        <div class="title"><%= showPost[0].title %></div>
       </div>
 
       <div class="topContainer">
-        <div class="postId"><%= showPostData[0].post_id %></div>
-        <div class="userId"><%= showPostData[0].user_id %></div>
+        <div class="postId"><%= showPost[0].post_id %></div>
+        <div class="userId"><%= showPost[0].user_id %></div>
         <div class="date">
-          <%= showPostData[0].created_date.toISOString().split('T')[0] %> &nbsp;
-          <% const timeParts = showPostData[0].created_time.split(':'); %> <%=
+          <%= showPost[0].created_date.toISOString().split('T')[0] %> &nbsp; <%
+          const timeParts = showPost[0].created_time.split(':'); %> <%=
           timeParts[0] %>:<%= timeParts[1] %>
         </div>
         <div class="likeCount">
           <i class="fa-solid fa-heart fa-2xs" style="color: #ff0000"></i><%=
-          showPostData[0].like_count %>
+          showPost[0].like_count %>
         </div>
       </div>
 
       <div class="constentContainer">
-        <div class="constent"><%= showPostData[0].content %></div>
+        <div class="constent"><%= showPost[0].content %></div>
       </div>
       <hr />
 
@@ -164,18 +164,18 @@
         </div>
         <hr />
 
-        <% if(showPostCommentData.length == 0 ){%>
+        <% if(showPostComment.length == 0 ){%>
         <span>NO COMMENTS</span>
         <hr />
-        <%}%> <% for (let i = 0; i < showPostCommentData.length; i++) { %>
+        <%}%> <% for (let i = 0; i < showPostComment.length; i++) { %>
         <div class="showComment">
           <i class="fa-solid fa-user fa-lg" style="color: #000000"></i>
           &nbsp;&nbsp;
           <div class="signin_user_id">
-            <%= showPostCommentData[i].signin_user_id%>
+            <%= showPostComment[i].signin_user_id%>
           </div>
           <span>&nbsp; : &nbsp;</span>
-          <div class="content"><%= showPostCommentData[i].content%></div>
+          <div class="content"><%= showPostComment[i].content%></div>
         </div>
         <br />
         <hr />
@@ -185,6 +185,7 @@
   </body>
 
   <script>
+    console.log("<%=signinUser[0]%>");
     function backList() {
       window.location.href = "/list";
     }
@@ -205,8 +206,8 @@
 
       if (Sendbord.bordInputComment.value != "") {
         const commentData = {
-          post_id: "<%= showPostCommentData[0].post_id%>",
-          signin_user_id: "<%= showPostCommentData[0].signin_user_id%>",
+          post_id: "<%= showPost[0].post_id%>",
+          signin_user_id: "<%= signinUser[0].signin_id%>",
           content: Sendbord.bordInputComment.value,
           created_date: created_date,
           created_time: created_time,
@@ -221,7 +222,7 @@
         alert("댓글 업로드");
         Sendbord.bordInputComment.value = "";
         window.location.href =
-          "/list/showPost?postId=<%= showPostCommentData[0].post_id%>";
+          "/list/showPost?postId=<%= showPost[0].post_id%>";
       } else {
         alert("댓글을 작성해주세요");
       }
