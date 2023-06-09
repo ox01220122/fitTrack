@@ -107,7 +107,6 @@
       }
 
       /* 게시글의 댓글 */
-
       .bordComment {
         background-color: rgb(108, 150, 122);
         margin-left: 50px;
@@ -136,18 +135,19 @@
         justify-self: center;
       }
 
+      /* 댓글쓰기, 댓글 보내기 container */
+      .sendComment {
+        display: flex;
+        width: 70%;
+      }
+
       /* 댓글쓰기 */
       .bordInputComment {
         width: 70%;
         height: 50%;
         resize: none;
+        overflow: hidden;
       }
-
-      /* 댓글 보내기 */
-      .sendComment {
-        width: 70%;
-      }
-
       /* ----------------------------------------------------------------------- */
 
       .emptyHeart {
@@ -245,19 +245,27 @@
             &nbsp;<%= searchAllData[i].like_count %>&nbsp;
           </div>
 
-          <!-- 댓글 갯수 -->
+          <!-- 댓글 갯수 (갯수 수정하기)-->
           <div class="commentNum">
             <i
               class="fa-solid fa-comment-dots fa-lg"
               style="color: #000000"
             ></i>
-            <div>&nbsp;<%= commentAllData[0].post_id%></div>
+
+            <% let commentNum = 0; %> <% for (let j = 0; j <
+            commentAllData.length; j++) { %><% if (commentAllData[j].post_id ==
+            searchAllData[i].post_id) { commentNum += 1; } %> <%}%>
+            <div>&nbsp;<%= commentNum%></div>
           </div>
 
           <!-- 댓글작성 -->
         </div>
-        <form name="sendForm">
-          <div class="sendComment">
+
+        <div class="sendComment">
+          <form
+            name="sendForm-<%= searchAllData[i].post_id%>"
+            id="sendForm-<%= searchAllData[i].post_id%>"
+          >
             <textarea
               rows="1"
               cols="50"
@@ -274,8 +282,8 @@
               id="sendButton-<%= searchAllData[i].post_id%>"
               onclick="clickSendButton(this)"
             ></i>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
     <% } %> <% } %>
@@ -362,7 +370,11 @@
 
     // comment_id, post_id, author_id, content, created_date
     function clickSendButton(element) {
-      const Sendbord = document.forms["sendForm"];
+      //게시글의 post_id
+      const commentPostNum = element.id.split("-")[1];
+      console.log("Clicked post_id:", commentPostNum);
+
+      const Sendbord = document.forms["sendForm-" + commentPostNum];
 
       const today = new Date();
       const year = today.getFullYear();
@@ -393,9 +405,8 @@
           data: commentData,
         });
         alert("댓글 업로드");
-        window.location.href = "/";
-        //버튼 눌리면 input태그 비워주기
         Sendbord.bordInputComment.value = "";
+        window.location.href = "/";
       } else {
         alert("댓글을 작성해주세요");
       }
