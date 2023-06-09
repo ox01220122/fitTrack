@@ -129,8 +129,6 @@
             <div class="bordInputMain">
               <div>제목</div>
               <textarea
-                rows="1"
-                cols="50"
                 class="bordInputTitle"
                 id="bordInputTitle"
                 name="bordInputTitle"
@@ -140,8 +138,6 @@
               <br />
               <div>내용</div>
               <textarea
-                rows="5"
-                cols="50"
                 class="bordInputContent"
                 id="bordInputContent"
                 name="bordInputContent"
@@ -158,16 +154,6 @@
         </div>
       </form>
     </div>
-
-    <!-- <form action="/" method="POST" name="form_info">
-      <input type="hidden" id="post_id" name="post_id" required />
-      <input type="hidden" id="user_id" name="user_id" required />
-      <input type="hidden" id="title" name="title" required />
-      <input type="hidden" id="content" name="content" required />
-      <input type="hidden" id="created_date" name="created_date" required />
-      <input type="hidden" id="created_time" name="created_time" required />
-      <input type="hidden" id="like_count" name="like_count" required />
-    </form> -->
   </body>
   <script>
     const bord = document.forms["bord"];
@@ -193,9 +179,8 @@
         const minutes = now.getMinutes();
         created_time = `${hours}:${minutes}`;
 
-        //post아이디를 쿠키로 저장해야할지 생각해야할듯
         const writeData = {
-          user_id: "<%= signinUser[0].signin_id%>", //임시 데이터(로그인 정보에서 받아오기)
+          user_id: "<%= signinUser[0].signin_id%>",
           title: bord.bordInputTitle.value,
           content: bord.bordInputContent.value,
           created_date: created_date,
@@ -207,12 +192,6 @@
           url: "/write",
           data: writeData,
         });
-        // .then((res) => {
-        //   console.log(
-        //     "데이터 보내기 성공해서 받은 데이터"
-        //     //res.data.postData.post_id
-        //   );
-        // });
         alert("게시글 업로드");
         window.location.href = "/";
         //버튼 눌리면 input태그 비워주기

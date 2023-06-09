@@ -39,25 +39,20 @@ exports.MbestPost = (callback) => {
     callback(rows);
   });
 };
+//저장되어있는 댓글 정보 가져오기
+exports.McommentAll = (callback) => {
+  const query = `SELECT * FROM comments ORDER BY post_id DESC`;
+  conn.query(query, (err, rows) => {
+    if (err) {
+      console.log("err:", err);
+    }
+    callback(rows);
+  });
+};
 
-//게시물 ID, 작성자 ID, 게시물 제목,게시물 내용,작성일, 좋아요 수 데이터베이스에 업로드
-// exports.Mwrite = (writeData, callback) => {
-//   let query = `INSERT INTO posts (user_id, title, content, created_date, created_time, like_count) VALUES
-//     ('${writeData.user_id}', '${writeData.title}', '${writeData.content}', '${writeData.created_date}',
-//     '${writeData.created_time}', '${writeData.like_count}')`;
-
-//   conn.query(query, (err, result) => {
-//     if (err) {
-//       console.log("데이터 저장 오류!!");
-//       console.log(err);
-//       callback(err); // 오류를 콜백으로 전달
-//       return;
-//     }
-//   });
-// };
 exports.Mwrite = (writeData) => {
   //형식 안맞아서 저장오류 날 일 없음. 그래서 오류처리 생략.
-  let query = `INSERT INTO posts (user_id, title, content, created_date, created_time, like_count) VALUES 
+  const query = `INSERT INTO posts (user_id, title, content, created_date, created_time, like_count) VALUES 
     ('${writeData.user_id}', '${writeData.title}', '${writeData.content}', '${writeData.created_date}',
     '${writeData.created_time}', '${writeData.like_count}')`;
   conn.query(query);
@@ -74,6 +69,7 @@ exports.Msearch = (searchData, callback) => {
   });
 };
 
+//클릭한 게시물 데이터 가져오기
 exports.MshowPost = (postIdData, callback) => {
   const query = `SELECT * FROM posts WHERE post_id = ${postIdData}`;
   conn.query(query, (err, rows) => {
@@ -81,6 +77,56 @@ exports.MshowPost = (postIdData, callback) => {
       console.log("err:", err);
     }
     console.log("post_id일치 데이터 : ", rows);
+    callback(rows);
+  });
+};
+
+//내게시물 가져오기
+exports.MmyPost = (userIdData, callback) => {
+  const query = `SELECT * FROM posts WHERE user_id = ${userIdData}`;
+  conn.query(query, (err, rows) => {
+    if (err) {
+      console.log("err:", err);
+    }
+    console.log("post_id일치 데이터 : ", rows);
+    callback(rows);
+  });
+};
+
+//comment 저장
+exports.writeComment = (commentData) => {
+  const query = `INSERT INTO comments (post_id, signin_user_id, content, created_date,created_time) VALUES 
+  ('${commentData.post_id}', '${commentData.signin_user_id}', '${commentData.content}'
+  , '${commentData.created_date}','${commentData.created_time}')`;
+  conn.query(query);
+};
+
+// 좋아요 눌렀을 때 게시물의 좋아요수 변경(postId받아왔음)
+exports.MpatchLikeCount = (postIdData, callback) => {
+  let query = `SELECT like_count FROM posts WHERE post_id = ${postIdData.postId}`;
+  conn.query(query, (err, rows) => {
+    let updateLikeCount;
+    if (postIdData.msg == "fullHeart") {
+      updateLikeCount = rows[0].like_count + 1;
+    } else {
+      updateLikeCount = rows[0].like_count - 1;
+    }
+    console.log("좋아요 수정값 : ", updateLikeCount);
+
+    query = `UPDATE posts SET like_count='${updateLikeCount}'
+    WHERE post_id = ${postIdData.postId}`;
+    conn.query(query);
+    console.log("헬로! ", rows);
+    callback(rows);
+  });
+};
+
+exports.MmyPost = (signIdData, callback) => {
+  const query = `SELECT * FROM posts WHERE user_id = '${signIdData}' ORDER BY post_id DESC`;
+  conn.query(query, (err, rows) => {
+    if (err) {
+      console.log("err:", err);
+    }
     callback(rows);
   });
 };

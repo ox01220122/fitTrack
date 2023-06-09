@@ -90,6 +90,9 @@
       .newList > .newTitle {
         width: 50%;
       }
+      .newList > .newTitle:hover {
+        text-decoration: underline double;
+      }
       .newList > .newWriter {
         width: 15%;
       }
@@ -169,7 +172,6 @@
         console.log(res.data.result);
 
         if (res.data.result) {
-          alert("완료");
           window.location.href = `/list/showPost?postId=${res.data.result}`;
         }
       });

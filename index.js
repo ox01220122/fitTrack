@@ -1,6 +1,9 @@
 const express = require("express");
 const app = express();
+const morgan = require("morgan");
 const PORT = 8000;
+
+app.use(morgan("dev"));
 
 // 템플릿
 app.set("view engine", "ejs");

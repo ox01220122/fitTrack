@@ -34,6 +34,8 @@
         color: white;
         display: flex;
         justify-content: flex-end;
+        align-items: center; /* 추가된 부분 */
+        font-size: small;
       }
 
       .buttonBar > .mypost,
@@ -45,7 +47,6 @@
       .buttonBar > .search {
         padding: 10px;
       }
-
       .buttonBar > .mypost:hover,
       .buttonBar > .write:hover,
       .buttonBar > .list:hover {
@@ -53,15 +54,15 @@
         color: black;
       }
       /* ------------------------------------------------------------------------------------- */
+      /* 게시글의 bestPost ! margin-top으로 게시물 사이 간격 조정하기 */
       .bestPost {
         background-color: rgb(124, 173, 155);
-        margin-top: 140px;
+        margin-top: 160px;
       }
       .mostRecentPost {
         background-color: rgb(124, 173, 155);
       }
 
-      /* 게시글의 top bar ! margin-top으로 게시물 사이 간격 조정하기 */
       .bordTopbar {
         background-color: rgb(71, 71, 75);
         margin-top: 50px;
@@ -87,7 +88,6 @@
         background-color: rgb(225, 128, 225);
         margin-left: 50px;
         margin-right: 50px;
-        padding-bottom: 170px;
         color: white;
         font-size: 15px;
       }
@@ -95,25 +95,19 @@
         background-color: green;
         display: flex;
         justify-content: center;
+        margin: 0px;
         /* align-items: center; */
       }
       .bordContentContent {
         background-color: blue;
         display: flex;
         justify-content: center;
+        margin: 0px;
         padding: 20px;
       }
 
-      .denoteTitle {
-        display: flex;
-        justify-content: center;
-      }
-      .denoteContent {
-        display: flex;
-        justify-content: center;
-      }
-
       /* 게시글의 댓글 */
+
       .bordComment {
         background-color: rgb(108, 150, 122);
         margin-left: 50px;
@@ -125,17 +119,37 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-      }
-      .sendComment {
-        width: 70%;
+        font-size: 20px;
       }
 
-      /* ----------------------------------------------------------------------- */
+      /* 하트, 하트 수 */
+      .bordComment > .heartNum {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      /* 댓글, 댓글 수 */
+      .commentNum {
+        display: flex;
+        align-items: center;
+        justify-self: center;
+      }
+
+      /* 댓글쓰기 */
       .bordInputComment {
         width: 70%;
         height: 50%;
         resize: none;
       }
+
+      /* 댓글 보내기 */
+      .sendComment {
+        width: 70%;
+      }
+
+      /* ----------------------------------------------------------------------- */
+
       .emptyHeart {
         cursor: auto;
       }
@@ -179,9 +193,7 @@
       <hr />
       <li><%= bestPost[i].title %></li>
       <hr />
-      <% } %> <% } %> <% } %> <% if(noPostCount == bestPost.length) {%>
-      <div>Best 게시물이 없습니다</div>
-      <%}%>
+      <% } %> <% } %> <% } %>
     </ol>
 
     <div class="mostRecentPost">
@@ -201,7 +213,7 @@
         <div class="userContainer">
           <div class="userIcon">
             &nbsp;&nbsp;<i
-              class="fa-solid fa-user fa-xl"
+              class="fa-solid fa-user fa-lg"
               style="color: #ffff"
             ></i>
           </div>
@@ -214,51 +226,66 @@
         </div>
       </div>
       <div class="bordContent">
-        <span class="denoteTitle">title</span>
         <br />
         <div class="bordContentTitle"><%= searchAllData[i].title %><br /></div>
-        <span class="denoteContent">content</span>
         <br />
         <div class="bordContentContent"><%= searchAllData[i].content %></div>
       </div>
       <div class="bordComment">
-        <!-- <br /> -->
         <!-- 비어있는 하트 -->
         <div class="heartNum">
+          &nbsp;
           <i
             id="emptyHeart-<%= searchAllData[i].post_id%>"
-            class="fa-regular fa-heart fa-xl"
+            class="fa-regular fa-heart fa-lg"
             style="color: #db0606"
             onclick="clickHeart(this)"
           ></i>
-          <%= searchAllData[i].like_count %>
-        </div>
+          <div class="likeCount">
+            &nbsp;<%= searchAllData[i].like_count %>&nbsp;
+          </div>
 
-        <div class="sendComment">
-          <textarea
-            rows="1"
-            cols="50"
-            class="bordInputComment"
-            id="bordInputComment"
-            placeholder="Comment"
-          ></textarea>
-          <!-- 전송버튼 -->
-          <i
-            class="fa-regular fa-paper-plane fa-xl"
-            style="color: #000000"
-            id="sendButton"
-          ></i>
+          <!-- 댓글 갯수 -->
+          <div class="commentNum">
+            <i
+              class="fa-solid fa-comment-dots fa-lg"
+              style="color: #000000"
+            ></i>
+            <div>&nbsp;<%= commentAllData[0].post_id%></div>
+          </div>
+
+          <!-- 댓글작성 -->
         </div>
+        <form name="sendForm">
+          <div class="sendComment">
+            <textarea
+              rows="1"
+              cols="50"
+              class="bordInputComment"
+              id="bordInputComment"
+              name="bordInputComment"
+              placeholder="Comment"
+            ></textarea>
+
+            <!-- 전송버튼 -->
+            <i
+              class="fa-regular fa-paper-plane fa-lg"
+              style="color: #000000"
+              id="sendButton-<%= searchAllData[i].post_id%>"
+              onclick="clickSendButton(this)"
+            ></i>
+          </div>
+        </form>
       </div>
     </div>
     <% } %> <% } %>
   </body>
-
   <script>
     const postBord = document.querySelector(".postBord");
     const write = document.querySelector(".write");
     const list = document.querySelector(".list");
     const writeBord = document.querySelector(".writeBord");
+
     //localhost:8000/write
     function writeButton() {
       window.location.href = "/write";
@@ -277,51 +304,100 @@
         alert("검색어를 입력하세요");
       } else {
         window.location.href = `/search?searchInput=${searchInput.value}`;
-        // axios({
-        //   method: "POST",
-        //   url: "/search",
-        //   data: { keyword: searchInput.value }, // 데이터를 params에 담아 전송
-        // }).then((res) => {
-        //   const result = res.data.result;
-        //   const postIdArr = [];
-        //   for (let i = 0; i < result.length; i++) {
-        //     postIdArr[i] = result[i].post_id;
-        //   }
-        //   console.log(postIdArr);
-        //   const queryString = postIdArr
-        //     .map((item) => "postIdArr=" + encodeURIComponent(item))
-        //     .join("&");
-        //   window.location.href = `/search?${queryString}`;
-        // const queryString = myArray.map(item => 'myArray=' + encodeURIComponent(item)).join('&');
-        // });
       }
     }
 
     //하트 눌렀을 경우 like_count ++ 해주기
-    function clickHeart() {
+    function clickHeart(element) {
+      const likeCount = document.querySelector(".likeCount");
+      // 좋아요 누른 post_id
       const emptyHeartNum = element.id.split("-")[1];
       console.log("Clicked post_id:", emptyHeartNum);
-      //emptyHeart
-      const heartIcon = document.querySelector(".fa-heart");
 
-      if (heartIcon.className == "fa-regular fa-heart fa-xl") {
-        //좋아요
-        heartIcon.className = "fa-solid fa-heart fa-xl";
-        heartIcon.style.color = "#ff0000";
+      // 좋아요 아이콘 선택자 수정
+      const heartIcon = document.querySelector("#" + element.id);
 
-        // axios({
-        //   method: "PATCH",
-        //   url: "/user/profile/edit",
-        //   data: { like_count: form.id.value },
-        // }).then((res) => {
-        //   if (res.data.result) {
-        //     alert("회원정보 수정완료!!!");
-        //   }
-        // });
+      if (heartIcon.classList.contains("fa-regular")) {
+        // 좋아요
+        alert("좋아요");
+        heartIcon.classList.remove("fa-regular");
+        heartIcon.classList.add("fa-solid");
+
+        //함수화 하기
+        axios({
+          method: "PATCH",
+          url: "/",
+          data: {
+            postId: emptyHeartNum,
+            msg: "fullHeart",
+          },
+        }).then((res) => {
+          console.log(res.data.likeCount[0].like_count);
+          alert("좋아요수 + 1");
+          likeCount.textContent = res.data.likeCount[0].like_count;
+        });
+      } else if (heartIcon.classList.contains("fa-solid")) {
+        // 좋아요 취소
+        alert("좋아요 취소");
+        heartIcon.classList.remove("fa-solid");
+        heartIcon.classList.add("fa-regular");
+        axios({
+          method: "PATCH",
+          url: "/",
+          data: {
+            postId: emptyHeartNum,
+            msg: "emptyHeart",
+          },
+        }).then((res) => {
+          console.log(res.data.likeCount[0].like_count);
+          alert("좋아요수 - 1");
+        });
+      }
+    }
+
+    function mypostButton() {
+      //내 게시물 모아보기
+      window.location.href = `/myPost?signinId=<%= signinUser[0].signin_id%>`;
+    }
+
+    // comment_id, post_id, author_id, content, created_date
+    function clickSendButton(element) {
+      const Sendbord = document.forms["sendForm"];
+
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = today.getMonth() + 1;
+      const day = today.getDate();
+      const created_date = `${year}-${month}-${day}`;
+
+      const now = new Date();
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      created_time = `${hours}:${minutes}`;
+
+      //send버튼 눌렀을 때 댓글 저장하기
+      const sendPostId = element.id.split("-")[1];
+      console.log("Clicked post_id:", sendPostId);
+
+      if (Sendbord.bordInputComment.value != "") {
+        const commentData = {
+          post_id: sendPostId,
+          signin_user_id: "<%= signinUser[0].signin_id%>",
+          content: Sendbord.bordInputComment.value,
+          created_date: created_date,
+          created_time: created_time,
+        };
+        axios({
+          method: "POST",
+          url: "/",
+          data: commentData,
+        });
+        alert("댓글 업로드");
+        window.location.href = "/";
+        //버튼 눌리면 input태그 비워주기
+        Sendbord.bordInputComment.value = "";
       } else {
-        // 따로 user테이블 만들어서 좋아요 클릭, 좋아요 누른 게시물 post_id저장 해야할듯
-        //좋아요 취소
-        heartIcon.className = "fa-regular fa-heart fa-xl";
+        alert("댓글을 작성해주세요");
       }
     }
   </script>
