@@ -72,10 +72,9 @@ exports.MshowPostComment = (postIdData, callback) => {
 };
 
 //내게시물 가져오기(매개변수: 사용자로그인 정보의 signin_id)
-exports.MmyPost = (userIdData, callback) => {
-  const query = `SELECT * FROM posts WHERE user_id = ${userIdData}`;
+exports.MmyPost = (signIdData, callback) => {
+  const query = `SELECT * FROM posts WHERE user_id = '${signIdData}' ORDER BY post_id DESC`;
   conn.query(query, (err, rows) => {
-    console.log("post_id일치 데이터 : ", rows);
     callback(rows);
   });
 };
@@ -104,14 +103,6 @@ exports.MpatchLikeCount = (postIdData, callback) => {
     WHERE post_id = ${postIdData.postId}`;
     conn.query(query);
     console.log("헬로! ", rows);
-    callback(rows);
-  });
-};
-
-//로그인한 사용자의 게시물 가져오기(매개변수: 사용자로그인 정보의 signin_id)
-exports.MmyPost = (signIdData, callback) => {
-  const query = `SELECT * FROM posts WHERE user_id = '${signIdData}'`;
-  conn.query(query, (err, rows) => {
     callback(rows);
   });
 };

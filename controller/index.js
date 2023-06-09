@@ -156,6 +156,7 @@ exports.CshowPost = (req, res) => {
 
 //GET localhost:8000/myPost
 exports.myPost = (req, res) => {
+  console.log("리사 !!", req.query.signinId);
   userData.MmyPost(req.query.signinId, (myPostData) => {
     res.render("myPost", { myPostData });
   });

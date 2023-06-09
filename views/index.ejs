@@ -59,6 +59,13 @@
         background-color: rgb(124, 173, 155);
         margin-top: 160px;
       }
+
+      .best1 {
+        color: blue;
+      }
+
+      /* ------------------------------------------------------------------------------------- */
+
       .mostRecentPost {
         background-color: rgb(124, 173, 155);
       }
@@ -191,7 +198,9 @@
       (bestPost[i].like_count === 0) { %> <% ++noPostCount %> <% continue%> <% }
       else { %>
       <hr />
-      <li><%= bestPost[i].title %></li>
+      <li>
+        <div class="best<%=i%>"><%= bestPost[i].title %></div>
+      </li>
       <hr />
       <% } %> <% } %> <% } %>
     </ol>
