@@ -156,8 +156,31 @@ exports.CshowPost = (req, res) => {
 
 //GET localhost:8000/myPost
 exports.myPost = (req, res) => {
-  console.log("리사 !!", req.query.signinId);
   userData.MmyPost(req.query.signinId, (myPostData) => {
-    res.render("myPost", { myPostData });
+    const signinId = req.query.signinId;
+    res.render("myPost", { myPostData, signinId });
   });
+};
+
+//GET localhost:8000/myPost/edit
+exports.edit = async (req, res) => {
+  //post_id로 게시물 데이터 가져오기
+  userData.MshowPost(req.query.post_id, (editPost) => {
+    const signinId = req.query.signinId;
+    res.render("edit", { editPost, signinId });
+  });
+};
+
+// PATCH localhost:8000/Mypost/edit
+exports.Cedit = async (req, res) => {
+  try {
+    const result = await new Promise((resolve, reject) => {
+      userData.MeditPost(req.body, (result) => {
+        resolve(result);
+      });
+    });
+    res.send({ result: result });
+  } catch (error) {
+    res.status(500).send({ error: "An error occurred" });
+  }
 };

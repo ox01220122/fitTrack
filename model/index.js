@@ -25,7 +25,7 @@ exports.MsigninUser = (callback) => {
 
 //하트수가 많은 게시글 제목 3개 불러오기(매개변수: X)
 exports.MbestPost = (callback) => {
-  const query = `SELECT title, like_count  FROM posts ORDER BY like_count DESC LIMIT 3`;
+  const query = `SELECT post_id, title, like_count  FROM posts ORDER BY like_count DESC LIMIT 3`;
   conn.query(query, (err, rows) => {
     callback(rows);
   });
@@ -105,4 +105,12 @@ exports.MpatchLikeCount = (postIdData, callback) => {
     console.log("헬로! ", rows);
     callback(rows);
   });
+};
+
+//게시물 수정(UPDATE)title, content, like_count 업데이트
+exports.MeditPost = (editData) => {
+  const query = `UPDATE posts SET title='${editData.title}',
+   content='${editData.content}' , like_count='${editData.like_count}'
+  WHERE post_id='${editData.post_id}' AND user_id='${editData.signin_id}'`;
+  conn.query(query);
 };

@@ -8,6 +8,7 @@
       src="https://kit.fontawesome.com/693f483c38.js"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <title>Document</title>
     <style>
       /* ----------고정 상단바 ---------------------------------------------- */
@@ -178,36 +179,53 @@
   <script>
     const correctionButton = document.querySelector("#correctionButton");
     const deleteButton = document.querySelector("#deleteButton");
+    let checkedCheckboxes = [];
+    let postId;
 
-    //게시물 수정
-    function clickCorrectionButton(element) {
-      const checkBoxNum = element.id.split("-")[1];
-      console.log("Clicked post_id:", checkBoxNum);
-
-      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-      let checkedCount = 0;
-
-      checkboxes.forEach((checkbox) => {
-        if (checkboxes.checked) {
-          checkedCount++;
-        }
-      });
-
-      alert(`체크된 개수: ${checkedCount}`);
-      alert("clickCorrectionButton");
-    }
-    //게시물 삭제
-    function clickDeleteButton() {
-      alert("clickDeleteButton");
-    }
-
+    //home으로 가기
     function goHome() {
-      window.location.href = `/`;
+      window.location.href = "/";
     }
 
     function showPost(element) {
       const postId = element.id.split("-")[1];
       window.location.href = `/list/showPost?postId=${postId}`;
+    }
+
+    // 게시물 수정
+    function clickCorrectionButton() {
+      CheckedCheckboxes();
+      if (checkedCheckboxes.length !== 1) {
+        alert("하나의 게시글만 체크해 주세요");
+        checkedCheckboxes.forEach((element) => {
+          element.checked = false;
+        });
+        checkedCheckboxes = [];
+      } else {
+        const signinId = "<%= signinId %>";
+        window.location.href = `/myPost/edit?post_id=${postId}&signinId=${signinId}`;
+      }
+
+      // 게시물 삭제
+      function clickDeleteButton() {
+        CheckedCheckboxes();
+        alert("clickDeleteButton");
+      }
+
+      function CheckedCheckboxes() {
+        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+        checkboxes.forEach(function (checkbox) {
+          if (checkbox.checked) {
+            postId = checkbox.id.split("-")[1];
+            console.log("체크된 체크박스: " + postId);
+            checkedCheckboxes.push(checkbox);
+          }
+        });
+
+        // 체크된 체크박스에 대한 추가 작업을 수행할 수 있습니다.
+        // 예를 들어, 해당 게시물을 삭제하거나 업데이트할 수 있습니다.
+      }
     }
   </script>
 </html>

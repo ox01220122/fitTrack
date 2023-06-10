@@ -16,8 +16,6 @@ router.post("/write", controller.Cwrite);
 
 //GET localhost:8000/search
 router.get("/search", controller.search);
-//POST localhost:8000/search
-// router.post("/search", controller.Csearch);
 
 //GET localhost:8000/list
 router.get("/list", controller.list);
@@ -29,6 +27,11 @@ router.post("/list/showPost", controller.CshowPost);
 
 //GET localhost:8000/myPost
 router.get("/myPost", controller.myPost);
+
+//GET localhost:8000/myPost/edit
+router.get("/myPost/edit", controller.edit);
+//PATCH localhost:8000/myPost/edit
+router.patch("/myPost/edit", controller.Cedit);
 
 //모듈사용
 module.exports = router;
