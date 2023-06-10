@@ -108,9 +108,19 @@ exports.MpatchLikeCount = (postIdData, callback) => {
 };
 
 //게시물 수정(UPDATE)title, content, like_count 업데이트
-exports.MeditPost = (editData) => {
+exports.Medit = (editData) => {
   const query = `UPDATE posts SET title='${editData.title}',
    content='${editData.content}' , like_count='${editData.like_count}'
   WHERE post_id='${editData.post_id}' AND user_id='${editData.signin_id}'`;
   conn.query(query);
+};
+
+//게시물 삭제(DELETE)post_id일치 게시물 삭제
+exports.Mdel = (post_id, like_post_id) => {
+  const postDelQuery = `DELETE FROM posts WHERE post_id=${post_id}`;
+  const commentDelQuery = `DELETE FROM comments WHERE post_id=${post_id}`;
+  const signinUserEditQuery = `UPDATE posts SET like_post_id=${like_post_id}`;
+  conn.query(postDelQuery);
+  conn.query(commentDelQuery);
+  conn.query(signinUserEditQuery);
 };

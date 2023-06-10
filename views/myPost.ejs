@@ -192,6 +192,18 @@
       window.location.href = `/list/showPost?postId=${postId}`;
     }
 
+    //체크된 체크박스
+    function CheckedCheckboxes() {
+      var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      checkboxes.forEach(function (checkbox) {
+        if (checkbox.checked) {
+          postId = checkbox.id.split("-")[1];
+          console.log("체크된 체크박스: " + postId);
+          checkedCheckboxes.push(checkbox);
+        }
+      });
+    }
+
     // 게시물 수정
     function clickCorrectionButton() {
       CheckedCheckboxes();
@@ -209,22 +221,21 @@
       // 게시물 삭제
       function clickDeleteButton() {
         CheckedCheckboxes();
-        alert("clickDeleteButton");
-      }
 
-      function CheckedCheckboxes() {
-        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-
-        checkboxes.forEach(function (checkbox) {
-          if (checkbox.checked) {
-            postId = checkbox.id.split("-")[1];
-            console.log("체크된 체크박스: " + postId);
-            checkedCheckboxes.push(checkbox);
+        axios({
+          method: "DELETE",
+          url: "/myPost/del",
+          data: {
+            //삭제할 post_id
+            post_id: postId, //배열을 넣어야 할것같음 (다시)
+          },
+        }).then((res) => {
+          if (res.data.result) {
+            alert("삭제완료");
+            const signinId = "<%= signinId %>";
+            window.location.href = `/myPost/edit?post_id=${postId}&signinId=${signinId}`;
           }
         });
-
-        // 체크된 체크박스에 대한 추가 작업을 수행할 수 있습니다.
-        // 예를 들어, 해당 게시물을 삭제하거나 업데이트할 수 있습니다.
       }
     }
   </script>

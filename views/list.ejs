@@ -129,7 +129,7 @@
 
     <div class="listContainer">
       <div class="listTopBar">
-        <div class="number">NUMBER</div>
+        <div class="number"></div>
         <div class="title">TITLE</div>
         <div class="writer">WRITER</div>
         <div class="date">DATE</div>
@@ -142,7 +142,7 @@
         id="newList-<%= searchAllData[i].post_id%>"
         onclick="showPost(this)"
       >
-        <div class="newNumber"><%= searchAllData[i].post_id%></div>
+        <div class="newNumber"><%= searchAllData.length-i%></div>
         <div class="newTitle"><%= searchAllData[i].title%></div>
         <div class="newWriter"><%= searchAllData[i].user_id%></div>
         <div class="newDate">

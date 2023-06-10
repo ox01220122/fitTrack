@@ -33,5 +33,8 @@ router.get("/myPost/edit", controller.edit);
 //PATCH localhost:8000/myPost/edit
 router.patch("/myPost/edit", controller.Cedit);
 
+//PATCH localhost:8000/myPost/del
+router.delete("/myPost/del", controller.Cdel); //다시!
+
 //모듈사용
 module.exports = router;

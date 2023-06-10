@@ -176,7 +176,7 @@ exports.edit = async (req, res) => {
 exports.Cedit = async (req, res) => {
   try {
     const result = await new Promise((resolve, reject) => {
-      userData.MeditPost(req.body, (result) => {
+      userData.Medit(req.body, (result) => {
         resolve(result);
       });
     });
@@ -184,4 +184,11 @@ exports.Cedit = async (req, res) => {
   } catch (error) {
     res.status(500).send({ error: "An error occurred" });
   }
+};
+
+// DELETE localhost:8000/Mypost/edit
+exports.Cdel = (req, res) => {
+  userData.Mdel(req.body, () => {
+    res.send({ result: true });
+  });
 };

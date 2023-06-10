@@ -257,7 +257,8 @@
             style="color: #db0606"
             onclick="clickHeart(this)"
           ></i>
-          <div class="likeCount">
+
+          <div class="likeCount" id="likeCount-<%= searchAllData[i].post_id%>">
             &nbsp;<%= searchAllData[i].like_count %>&nbsp;
           </div>
 
@@ -346,10 +347,14 @@
 
     //하트 눌렀을 경우 like_count ++ 해주기
     function clickHeart(element) {
-      const likeCount = document.querySelector(".likeCount");
       // 좋아요 누른 post_id
       const emptyHeartNum = element.id.split("-")[1];
       console.log("Clicked post_id:", emptyHeartNum);
+
+      let likeCount = "likeCount" + emptyHeartNum;
+      console.log(likeCount);
+      // 선택되었는지 확인
+      likeCount = document.querySelector(`#${likeCount}`);
 
       // 좋아요 아이콘 선택자 수정
       const heartIcon = document.querySelector("#" + element.id);
