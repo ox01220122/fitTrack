@@ -314,14 +314,15 @@
 
     //user가 좋아요 눌러 놓은 post는 full 하트로 바꿔주기
     let UserlikePostId = "<%=signinUser[0].like_post_id%>";
-    console.log("문자열: ", UserlikePostId);
-
-    UserlikePostId = UserlikePostId.split(",").map(Number);
-    console.log("배열: ", UserlikePostId);
+    UserlikePostId = UserlikePostId.slice(1, -1);
+    UserlikePostId = UserlikePostId.split(",");
+    UserlikePostId = UserlikePostId.map((item) => parseInt(item.trim()));
+    console.log("여기야!", UserlikePostId);
 
     //배열에 있는 post_id값과 일치하는 post의 하트들을 full하트로 바꿔주기
     for (let i = 0; i < UserlikePostId.length; i++) {
-      let likeCount = "#emptyHeart-" + UserlikePostId[i];
+      let likeCount = "#emptyHeart-" + parseInt(UserlikePostId[i]);
+      console.log(likeCount);
       const defaultHeart = document.querySelector(likeCount);
       defaultHeart.classList.remove("fa-regular");
       defaultHeart.classList.add("fa-solid");
@@ -360,8 +361,10 @@
       window.location.href = `/list/showPost?postId=${postId}`;
     }
 
+    // console.log("이전상태 배열에 넣기", arrHeartPostId);
+    const arrHeartPostId = UserlikePostId;
     //하트 눌렀을 경우 like_count ++ 해주기
-    let arrHeartPostId = [];
+    console.log("새로 생성한 배열 타입 : ", typeof arrHeartPostId[0]);
     function clickHeart(element) {
       // 좋아요 누른 post_id
       const emptyHeartNum = element.id.split("-")[1];
@@ -379,10 +382,11 @@
         heartIcon.classList.remove("fa-regular");
         heartIcon.classList.add("fa-solid");
         // 중복되지 않은 경우에만 좋아요 누른 게시물 배열에 push
-        if (!arrHeartPostId.includes(emptyHeartNum)) {
-          arrHeartPostId.push(emptyHeartNum);
+
+        if (!arrHeartPostId.includes(parseInt(emptyHeartNum))) {
+          arrHeartPostId.push(parseInt(emptyHeartNum));
         }
-        // console.log("하트 + 배열값 :", arrHeartPostId);
+        console.log("push후 : ", arrHeartPostId);
         //나중에 함수화 하기!!!
         axios({
           //데이터베이스에 좋아요+1 값 업데이트(새로고침 했을때 반영)
@@ -402,13 +406,13 @@
         heartIcon.classList.add("fa-regular");
 
         // 중복되는 값이 있는 경우에만 좋아요 누른 게시물 배열에 splice
-        if (arrHeartPostId.includes(emptyHeartNum)) {
-          const index = arrHeartPostId.indexOf(emptyHeartNum);
+        if (arrHeartPostId.includes(parseInt(emptyHeartNum))) {
+          const index = arrHeartPostId.indexOf(parseInt(emptyHeartNum));
           if (index > -1) {
             arrHeartPostId.splice(index, 1);
           }
         }
-        // console.log("하트 - 배열값 :", arrHeartPostId);
+        console.log("splice후 : ", arrHeartPostId);
         axios({
           method: "PATCH",
           url: "/",
@@ -424,13 +428,13 @@
       }
 
       //signin_user에 저장하기
+      console.log("데이터 보내기 전 배열입니다", arrHeartPostId);
       axios({
         method: "PATCH",
         url: "/likeCountEdit",
-        data: {
-          arrHeartPostId: arrHeartPostId,
-        },
+        data: arrHeartPostId,
       }).then((res) => {
+        alert("좋아요 배열 수정성공");
         window.location.href = "/"; //수정
       });
     }

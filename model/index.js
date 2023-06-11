@@ -110,7 +110,7 @@ exports.MpatchLikeCount = (postIdData, callback) => {
 //게시물 수정(UPDATE)title, content, like_count 업데이트
 exports.Medit = (editData) => {
   const query = `UPDATE posts SET title='${editData.title}',
-   content='${editData.content}' , like_count='${editData.like_count}'
+   content='${editData.content}'
   WHERE post_id='${editData.post_id}' AND user_id='${editData.signin_id}'`;
   conn.query(query);
 };
@@ -126,9 +126,16 @@ exports.Mdel = (post_id, callback) => {
   callback();
 };
 
-//좋아요 누른 게시물 post_id 업데이트
+//좋아요 누른 게시물 post_id 배열 업데이트
 exports.MlikeCountEdit = (likeCountEditData) => {
-  const stringData = JSON.stringify(likeCountEditData); // 배열을 JSON 문자열로 변환
-  const query = `UPDATE signin_user SET like_post_id = '${stringData}'`;
-  conn.query(query);
+  if (likeCountEditData.length === 0) {
+    //빈 배열일 경우 빈 문자열로 저장
+    let stringData = "";
+    const query = `UPDATE signin_user SET like_post_id = '${stringData}'`;
+    conn.query(query);
+  } else {
+    let stringData = JSON.stringify(likeCountEditData); // 배열을 JSON 문자열로 변환
+    const query = `UPDATE signin_user SET like_post_id = '${stringData}'`;
+    conn.query(query);
+  }
 };
