@@ -199,9 +199,9 @@
         postId = checkbox.id.split("-")[1];
         if (checkbox.checked) {
           checkedCheckboxes.push(checkbox);
-          arrPostId.push(postId);
+          arrPostId.push(parseInt(postId));
         } else {
-          var index = arrPostId.indexOf(postId);
+          var index = arrPostId.indexOf(parseInt(postId));
           if (index > -1) {
             arrPostId.splice(index, 1);
           }
@@ -232,22 +232,22 @@
       CheckedCheckboxes();
       if (checkedCheckboxes.length === 0) {
         alert("삭제할 게시물을 체크해 주세요");
+      } else {
+        axios({
+          method: "DELETE",
+          url: "/myPost/del",
+          data: {
+            // 삭제할 post_id
+            post_id: arrPostId,
+          },
+        }).then((res) => {
+          if (res.data.result) {
+            alert("삭제완료");
+            const signinId = "<%= signinId %>";
+            window.location.href = `/myPost?signinId=${signinId}`;
+          }
+        });
       }
-
-      axios({
-        method: "DELETE",
-        url: "/myPost/del",
-        data: {
-          // 삭제할 post_id
-          post_id: arrPostId,
-        },
-      }).then((res) => {
-        if (res.data.result) {
-          alert("삭제완료");
-          const signinId = "<%= signinId %>";
-          window.location.href = `/myPost/edit?post_id=${postId}&signinId=${signinId}`;
-        }
-      });
     }
   </script>
 </html>

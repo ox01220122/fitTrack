@@ -117,12 +117,45 @@ exports.Medit = (editData) => {
 
 //게시물 삭제(DELETE)post_id일치 게시물 삭제
 exports.Mdel = (post_id, callback) => {
-  const postDelQuery = `DELETE FROM posts WHERE post_id=${post_id}`;
-  const commentDelQuery = `DELETE FROM comments WHERE post_id=${post_id}`;
-  const signinUserEditQuery = `UPDATE posts SET like_post_id=${like_post_id}`;
-  conn.query(postDelQuery);
-  conn.query(commentDelQuery);
-  conn.query(signinUserEditQuery);
+  if (post_id.length !== 0) {
+    for (const id of post_id) {
+      const postDelQuery = `DELETE FROM posts WHERE post_id=${id}`;
+      conn.query(postDelQuery);
+    }
+  }
+  if (post_id.length !== 0) {
+    for (const id of post_id) {
+      const commentDelQuery = `DELETE FROM comments WHERE post_id=${id}`;
+      conn.query(commentDelQuery);
+    }
+  }
+  if (post_id.length !== 0) {
+    const likePostIdQuery = `SELECT like_post_id FROM signin_user`;
+
+    conn.query(likePostIdQuery, (err, rows) => {
+      console.log(rows[0].like_post_id);
+      let UserlikePostId = rows[0].like_post_id;
+      UserlikePostId = UserlikePostId.slice(1, -1);
+      UserlikePostId = UserlikePostId.split(",");
+      UserlikePostId = UserlikePostId.map((item) => parseInt(item.trim()));
+      console.log("배열로 만들었당", UserlikePostId);
+      console.log("post_id타입 검사", typeof post_id);
+      for (const id of post_id) {
+        if (UserlikePostId.includes(parseInt(id))) {
+          const index = UserlikePostId.indexOf(parseInt(id));
+          if (index > -1) {
+            UserlikePostId.splice(index, 1);
+          }
+        }
+      }
+      console.log(UserlikePostId);
+      UserlikePostId = JSON.stringify(UserlikePostId); // 배열을 JSON 문자열로 변환
+      const signinUserEditQuery = `UPDATE signin_user SET like_post_id=${UserlikePostId}`;
+      conn.query(signinUserEditQuery);
+    });
+  }
+  //signin_user에서 like_post_id가져와서 하나하나 post_id랑 일치하는거 있는지 검사하고 삭제후
+  //다시 update하기(select, update 두개 사용)
   callback();
 };
 

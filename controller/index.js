@@ -188,25 +188,11 @@ exports.Cedit = async (req, res) => {
 
 // DELETE localhost:8000/Mypost/edit
 exports.Cdel = (req, res) => {
-  userData.Mdel(req.body, () => {
+  userData.Mdel(req.body.post_id, () => {
     res.send({ result: true });
   });
 };
 
-// PATCH localhost:8000/likeCountEdit
-// exports.ClikeCountEdit = async (req, res) => {
-//   try {
-//     const result = await new Promise((resolve, reject) => {
-//       userData.MlikeCountEdit(req.body.arrHeartPostId, (result) => {
-//         resolve(result);
-//       });
-//     });
-//     console.log("result는?", result);
-//     res.send({ result: result });
-//   } catch (error) {
-//     res.status(500).send({ error: "An error occurred" });
-//   }
-// };
 exports.ClikeCountEdit = (req, res) => {
   userData.MlikeCountEdit(req.body, (result) => {
     res.send({ result: true });
