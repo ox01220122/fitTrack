@@ -188,7 +188,7 @@ exports.Cedit = async (req, res) => {
 
 // DELETE localhost:8000/Mypost/edit
 exports.Cdel = (req, res) => {
-  userData.Mdel(req.body.post_id, () => {
+  userData.Mdel(req.body, () => {
     res.send({ result: true });
   });
 };

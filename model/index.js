@@ -116,67 +116,64 @@ exports.Medit = (editData) => {
 };
 
 //게시물 삭제(DELETE)post_id일치 게시물 삭제
-exports.Mdel = (post_id, callback) => {
-  if (post_id.length !== 0) {
-    for (const postId of post_id) {
-      const postDelQuery = `DELETE FROM posts WHERE post_id=${postId}`;
-      conn.query(postDelQuery, (err, result) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-        console.log(`Deleted post with post_id=${id}`);
-      });
+//comments삭제할 때 post_id와 일치하는 comment_id를 불러와서 삭제해야 할 듯(무결성 떄문에 삭제안됨)
+exports.Mdel = (delDate, callback) => {
+  //posts 삭제
+  if (delDate.post_id.length !== 0) {
+    for (const postId of delDate.post_id) {
+      const postDelQuery = `DELETE FROM posts WHERE post_id = ${postId}`;
+      conn.query(postDelQuery);
     }
   }
-  if (post_id.length !== 0) {
-    for (const commentPostId of post_id) {
-      const commentDelQuery = `DELETE FROM comments WHERE post_id=${commentPostId}`;
-      conn.query(commentDelQuery, (err, result) => {
-        if (err) {
-          console.error(err);
-          return;
+  //comments 삭제
+  if (delDate.post_id.length !== 0) {
+    for (const commentPostId of delDate.post_id) {
+      const commentIdQuery = `SELECT comment_id FROM comments WHERE post_id = ${commentPostId}`;
+      conn.query(commentIdQuery, (err, rows) => {
+        for (const comment_id of rows) {
+          let commentDelQuery = `DELETE FROM comments
+          WHERE post_id = ${commentPostId} AND comment_id = ${comment_id}`;
+          conn.query(commentDelQuery);
         }
       });
     }
   }
-  if (post_id.length !== 0) {
+
+  //signin_user의 like_post_id새로 update
+  if (delDate.post_id.length !== 0) {
     const likePostIdQuery = `SELECT like_post_id FROM signin_user`;
 
     conn.query(likePostIdQuery, (err, rows) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      console.log(rows[0].like_post_id);
+      // if (err) {
+      //   console.error(err);
+      //   return;
+      // }
+      console.log("문자열로 가져와짐 : ", rows[0].like_post_id);
       let UserlikePostId = rows[0].like_post_id;
-      UserlikePostId = UserlikePostId.slice(1, -1);
-      UserlikePostId = UserlikePostId.split(",");
-      UserlikePostId = UserlikePostId.map((item) => parseInt(item.trim()));
-      console.log("배열로 만들었당", UserlikePostId);
-      console.log("post_id타입 검사", typeof post_id);
-      for (const id of post_id) {
-        if (UserlikePostId.includes(parseInt(id))) {
-          const index = UserlikePostId.indexOf(parseInt(id));
-          if (index > -1) {
-            UserlikePostId.splice(index, 1);
+      if (UserlikePostId !== "[]") {
+        UserlikePostId = UserlikePostId.slice(1, -1);
+        UserlikePostId = UserlikePostId.split(",");
+        UserlikePostId = UserlikePostId.map((item) => parseInt(item.trim()));
+        console.log("배열로 만들었당", UserlikePostId);
+        console.log("post_id", delDate.post_id);
+        for (const id of delDate.post_id) {
+          if (UserlikePostId.includes(parseInt(id))) {
+            const index = UserlikePostId.indexOf(parseInt(id));
+            if (index > -1) {
+              UserlikePostId.splice(index, 1);
+            }
           }
         }
+        console.log("for문 이후의 배열", UserlikePostId);
+        UserlikePostId = JSON.stringify(UserlikePostId); // 배열을 JSON 문자열로 변환
+        console.log("문자열로 : ", UserlikePostId);
+        const signinUserEditQuery = `UPDATE signin_user SET like_post_id = '${UserlikePostId}'
+        WHERE signin_id = ${delDate.signin_id}`;
+        conn.query(signinUserEditQuery);
+        callback();
       }
-      console.log(UserlikePostId);
-      UserlikePostId = JSON.stringify(UserlikePostId); // 배열을 JSON 문자열로 변환
-      const signinUserEditQuery = `UPDATE signin_user SET like_post_id=${UserlikePostId}`;
-      conn.query(signinUserEditQuery, (err, result) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-        console.log("Updated like_post_id in signin_user table");
-      });
     });
   }
-
-  callback();
 };
 
 //좋아요 누른 게시물 post_id 배열 업데이트

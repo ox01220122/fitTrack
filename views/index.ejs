@@ -356,7 +356,7 @@
     }
 
     function clickBestPost(event) {
-      const postId = event.target.id.split("-")[1];
+      const postId = event.id.split("-")[1];
       window.location.href = `/list/showPost?postId=${postId}`;
     }
 

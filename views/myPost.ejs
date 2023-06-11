@@ -240,18 +240,21 @@
     // 게시물 삭제
     function clickDeleteButton() {
       CheckedCheckboxes();
+      var checkboxes = document.querySelectorAll('input[type="checkbox"]');
       checkboxes.forEach(function (checkbox) {
         postId = checkbox.id.split("-")[1];
       });
       if (checkedCheckboxes.length === 0) {
         alert("삭제할 게시물을 체크해 주세요");
       } else {
+        const signin_id = "<%= signinId %>";
         axios({
           method: "DELETE",
           url: "/myPost/del",
           data: {
             // 삭제할 post_id
             post_id: arrPostId,
+            signin_id: signin_id,
           },
         }).then((res) => {
           if (res.data.result) {
