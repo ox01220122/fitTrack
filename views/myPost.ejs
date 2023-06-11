@@ -212,7 +212,15 @@
     // 게시물 수정
     function clickCorrectionButton() {
       CheckedCheckboxes();
-      console.log("확인용", arrPostId);
+      var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      var postIds = []; // 체크된 태그의 ID들을 담을 배열
+      checkboxes.forEach(function (checkbox) {
+        if (checkbox.checked) {
+          var postId = checkbox.id.split("-")[1];
+          postIds.push(postId); // 체크된 태그의 ID를 배열에 추가
+        }
+      });
+      console.log("확인용", postIds);
       if (checkedCheckboxes.length === 0) {
         alert("수정할 게시물을 체크해 주세요");
       } else if (checkedCheckboxes.length !== 1) {
@@ -223,6 +231,7 @@
         checkedCheckboxes = [];
       } else {
         const signinId = "<%= signinId %>";
+        const postId = postIds[0]; // 체크된 태그의 ID 배열의 첫 번째 값
         window.location.href = `/myPost/edit?post_id=${postId}&signinId=${signinId}`;
       }
     }
@@ -230,6 +239,9 @@
     // 게시물 삭제
     function clickDeleteButton() {
       CheckedCheckboxes();
+      checkboxes.forEach(function (checkbox) {
+        postId = checkbox.id.split("-")[1];
+      });
       if (checkedCheckboxes.length === 0) {
         alert("삭제할 게시물을 체크해 주세요");
       } else {

@@ -109,7 +109,7 @@
         background-color: blue;
         display: flex;
         justify-content: center;
-        padding: 20px;
+        /* padding: 100%; */
       }
 
       .denoteTitle {
@@ -194,17 +194,16 @@
         </div>
       </div>
       <div class="bordContent">
-        <span class="denoteTitle">title</span>
+        <!-- <span class="denoteTitle">title</span> -->
         <br />
         <div class="bordContentTitle"><%= searchData[i].title %><br /></div>
-        <span class="denoteContent">content</span>
+        <!-- <span class="denoteContent">content</span> -->
         <br />
         <div class="bordContentContent"><%= searchData[i].content %></div>
       </div>
-      <div class="bordComment">
-        <!-- <br /> -->
-        <!-- 비어있는 하트 -->
-        <div class="heartNum">
+      <!-- <div class="bordComment"> -->
+      <!-- 비어있는 하트 -->
+      <!-- <div class="heartNum">
           <i
             id="emptyHeart-<%= searchData[i].post_id%>"
             class="fa-regular fa-heart fa-xl"
@@ -221,15 +220,15 @@
             class="bordInputComment"
             id="bordInputComment"
             placeholder="Comment"
-          ></textarea>
-          <!-- 전송버튼 -->
-          <i
+          ></textarea> -->
+      <!-- 전송버튼 -->
+      <!-- <i
             class="fa-regular fa-paper-plane fa-xl"
             style="color: #000000"
             id="sendButton"
           ></i>
         </div>
-      </div>
+      </div> -->
     </div>
     <% } %> <% } %>
   </body>

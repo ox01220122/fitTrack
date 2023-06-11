@@ -118,21 +118,36 @@ exports.Medit = (editData) => {
 //게시물 삭제(DELETE)post_id일치 게시물 삭제
 exports.Mdel = (post_id, callback) => {
   if (post_id.length !== 0) {
-    for (const id of post_id) {
-      const postDelQuery = `DELETE FROM posts WHERE post_id=${id}`;
-      conn.query(postDelQuery);
+    for (const postId of post_id) {
+      const postDelQuery = `DELETE FROM posts WHERE post_id=${postId}`;
+      conn.query(postDelQuery, (err, result) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        console.log(`Deleted post with post_id=${id}`);
+      });
     }
   }
   if (post_id.length !== 0) {
-    for (const id of post_id) {
-      const commentDelQuery = `DELETE FROM comments WHERE post_id=${id}`;
-      conn.query(commentDelQuery);
+    for (const commentPostId of post_id) {
+      const commentDelQuery = `DELETE FROM comments WHERE post_id=${commentPostId}`;
+      conn.query(commentDelQuery, (err, result) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+      });
     }
   }
   if (post_id.length !== 0) {
     const likePostIdQuery = `SELECT like_post_id FROM signin_user`;
 
     conn.query(likePostIdQuery, (err, rows) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
       console.log(rows[0].like_post_id);
       let UserlikePostId = rows[0].like_post_id;
       UserlikePostId = UserlikePostId.slice(1, -1);
@@ -151,11 +166,16 @@ exports.Mdel = (post_id, callback) => {
       console.log(UserlikePostId);
       UserlikePostId = JSON.stringify(UserlikePostId); // 배열을 JSON 문자열로 변환
       const signinUserEditQuery = `UPDATE signin_user SET like_post_id=${UserlikePostId}`;
-      conn.query(signinUserEditQuery);
+      conn.query(signinUserEditQuery, (err, result) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        console.log("Updated like_post_id in signin_user table");
+      });
     });
   }
-  //signin_user에서 like_post_id가져와서 하나하나 post_id랑 일치하는거 있는지 검사하고 삭제후
-  //다시 update하기(select, update 두개 사용)
+
   callback();
 };
 

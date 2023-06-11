@@ -314,10 +314,16 @@
 
     //user가 좋아요 눌러 놓은 post는 full 하트로 바꿔주기
     let UserlikePostId = "<%=signinUser[0].like_post_id%>";
-    UserlikePostId = UserlikePostId.slice(1, -1);
-    UserlikePostId = UserlikePostId.split(",");
-    UserlikePostId = UserlikePostId.map((item) => parseInt(item.trim()));
-    console.log("여기야!", UserlikePostId);
+    console.log("확인", UserlikePostId);
+    if (!(UserlikePostId == "" || UserlikePostId == "[]")) {
+      UserlikePostId = UserlikePostId.slice(1, -1);
+      UserlikePostId = UserlikePostId.split(",");
+      UserlikePostId = UserlikePostId.map((item) => parseInt(item.trim()));
+      console.log("여기야!", UserlikePostId);
+    } else {
+      UserlikePostId = [];
+      console.log("하트 없음", UserlikePostId);
+    }
 
     //배열에 있는 post_id값과 일치하는 post의 하트들을 full하트로 바꿔주기
     for (let i = 0; i < UserlikePostId.length; i++) {
@@ -364,7 +370,7 @@
     // console.log("이전상태 배열에 넣기", arrHeartPostId);
     const arrHeartPostId = UserlikePostId;
     //하트 눌렀을 경우 like_count ++ 해주기
-    console.log("새로 생성한 배열 타입 : ", typeof arrHeartPostId[0]);
+    console.log("새로 생성한 배열 타입 : ", typeof arrHeartPostId);
     function clickHeart(element) {
       // 좋아요 누른 post_id
       const emptyHeartNum = element.id.split("-")[1];
@@ -399,6 +405,7 @@
         }).then((res) => {
           //좋아요수 + 1
           likeCount.textContent = res.data.likeCount[0].like_count + 1;
+          window.location.href = `/`;
         });
       } else if (heartIcon.classList.contains("fa-solid")) {
         // 좋아요 취소
@@ -424,6 +431,7 @@
           //좋아요수 - 1
           // console.log(res.data.likeCount[0].like_count);
           likeCount.textContent = res.data.likeCount[0].like_count - 1;
+          window.location.href = `/`;
         });
       }
 
