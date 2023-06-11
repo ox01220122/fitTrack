@@ -351,9 +351,8 @@
       const emptyHeartNum = element.id.split("-")[1];
       console.log("Clicked post_id:", emptyHeartNum);
 
-      let likeCount = "likeCount" + emptyHeartNum;
-      console.log(likeCount);
-      // 선택되었는지 확인
+      //하트 선택
+      let likeCount = "likeCount-" + emptyHeartNum;
       likeCount = document.querySelector(`#${likeCount}`);
 
       // 좋아요 아이콘 선택자 수정
@@ -361,7 +360,6 @@
 
       if (heartIcon.classList.contains("fa-regular")) {
         // 좋아요
-        alert("좋아요");
         heartIcon.classList.remove("fa-regular");
         heartIcon.classList.add("fa-solid");
 
@@ -374,13 +372,12 @@
             msg: "fullHeart",
           },
         }).then((res) => {
-          console.log(res.data.likeCount[0].like_count);
-          alert("좋아요수 + 1");
-          likeCount.textContent = res.data.likeCount[0].like_count;
+          //좋아요수 + 1
+          // console.log(res.data.likeCount[0].like_count);
+          likeCount.textContent = res.data.likeCount[0].like_count + 1;
         });
       } else if (heartIcon.classList.contains("fa-solid")) {
         // 좋아요 취소
-        alert("좋아요 취소");
         heartIcon.classList.remove("fa-solid");
         heartIcon.classList.add("fa-regular");
         axios({
@@ -391,8 +388,9 @@
             msg: "emptyHeart",
           },
         }).then((res) => {
-          console.log(res.data.likeCount[0].like_count);
-          alert("좋아요수 - 1");
+          //좋아요수 - 1
+          // console.log(res.data.likeCount[0].like_count);
+          likeCount.textContent = res.data.likeCount[0].like_count - 1;
         });
       }
     }
