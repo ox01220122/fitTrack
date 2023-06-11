@@ -192,3 +192,19 @@ exports.Cdel = (req, res) => {
     res.send({ result: true });
   });
 };
+
+// PATCH localhost:8000/likeCountEdit
+exports.ClikeCountEdit = async (req, res) => {
+  try {
+    const result = await new Promise((resolve, reject) => {
+      //req.body수정하기 ~ 데이터 보낸걸로 !!
+      userData.MlikeCountEdit(req.body.arrHeartPostId, (result) => {
+        resolve(result);
+      });
+    });
+    console.log("result는?", result);
+    res.send({ result: result });
+  } catch (error) {
+    res.status(500).send({ error: "An error occurred" });
+  }
+};

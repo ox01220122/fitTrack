@@ -36,5 +36,8 @@ router.patch("/myPost/edit", controller.Cedit);
 //PATCH localhost:8000/myPost/del
 router.delete("/myPost/del", controller.Cdel); //다시!
 
+//PATCH localhost:8000/likeCountEdit
+router.patch("/likeCountEdit", controller.ClikeCountEdit);
+
 //모듈사용
 module.exports = router;

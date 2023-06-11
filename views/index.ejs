@@ -312,6 +312,21 @@
     const list = document.querySelector(".list");
     const writeBord = document.querySelector(".writeBord");
 
+    //user가 좋아요 눌러 놓은 post는 full 하트로 바꿔주기
+    let UserlikePostId = "<%=signinUser[0].like_post_id%>";
+    console.log("문자열: ", UserlikePostId);
+
+    UserlikePostId = UserlikePostId.split(",").map(Number);
+    console.log("배열: ", UserlikePostId);
+
+    //배열에 있는 post_id값과 일치하는 post의 하트들을 full하트로 바꿔주기
+    for (let i = 0; i < UserlikePostId.length; i++) {
+      let likeCount = "#emptyHeart-" + UserlikePostId[i];
+      const defaultHeart = document.querySelector(likeCount);
+      defaultHeart.classList.remove("fa-regular");
+      defaultHeart.classList.add("fa-solid");
+    }
+
     //localhost:8000/write
     function writeButton() {
       window.location.href = "/write";
@@ -346,15 +361,16 @@
     }
 
     //하트 눌렀을 경우 like_count ++ 해주기
+    let arrHeartPostId = [];
     function clickHeart(element) {
       // 좋아요 누른 post_id
       const emptyHeartNum = element.id.split("-")[1];
       console.log("Clicked post_id:", emptyHeartNum);
+      //좋아요 누른 post_id를 배열로 만들어 signin_user에 저장하기
 
       //하트 선택
       let likeCount = "likeCount-" + emptyHeartNum;
       likeCount = document.querySelector(`#${likeCount}`);
-
       // 좋아요 아이콘 선택자 수정
       const heartIcon = document.querySelector("#" + element.id);
 
@@ -362,9 +378,14 @@
         // 좋아요
         heartIcon.classList.remove("fa-regular");
         heartIcon.classList.add("fa-solid");
-
-        //함수화 하기!!!
+        // 중복되지 않은 경우에만 좋아요 누른 게시물 배열에 push
+        if (!arrHeartPostId.includes(emptyHeartNum)) {
+          arrHeartPostId.push(emptyHeartNum);
+        }
+        // console.log("하트 + 배열값 :", arrHeartPostId);
+        //나중에 함수화 하기!!!
         axios({
+          //데이터베이스에 좋아요+1 값 업데이트(새로고침 했을때 반영)
           method: "PATCH",
           url: "/",
           data: {
@@ -373,13 +394,21 @@
           },
         }).then((res) => {
           //좋아요수 + 1
-          // console.log(res.data.likeCount[0].like_count);
           likeCount.textContent = res.data.likeCount[0].like_count + 1;
         });
       } else if (heartIcon.classList.contains("fa-solid")) {
         // 좋아요 취소
         heartIcon.classList.remove("fa-solid");
         heartIcon.classList.add("fa-regular");
+
+        // 중복되는 값이 있는 경우에만 좋아요 누른 게시물 배열에 splice
+        if (arrHeartPostId.includes(emptyHeartNum)) {
+          const index = arrHeartPostId.indexOf(emptyHeartNum);
+          if (index > -1) {
+            arrHeartPostId.splice(index, 1);
+          }
+        }
+        // console.log("하트 - 배열값 :", arrHeartPostId);
         axios({
           method: "PATCH",
           url: "/",
@@ -393,6 +422,17 @@
           likeCount.textContent = res.data.likeCount[0].like_count - 1;
         });
       }
+
+      //signin_user에 저장하기
+      axios({
+        method: "PATCH",
+        url: "/likeCountEdit",
+        data: {
+          arrHeartPostId: arrHeartPostId,
+        },
+      }).then((res) => {
+        window.location.href = "/"; //수정
+      });
     }
 
     function mypostButton() {

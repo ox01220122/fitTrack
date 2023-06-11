@@ -116,11 +116,19 @@ exports.Medit = (editData) => {
 };
 
 //게시물 삭제(DELETE)post_id일치 게시물 삭제
-exports.Mdel = (post_id, like_post_id) => {
+exports.Mdel = (post_id, callback) => {
   const postDelQuery = `DELETE FROM posts WHERE post_id=${post_id}`;
   const commentDelQuery = `DELETE FROM comments WHERE post_id=${post_id}`;
   const signinUserEditQuery = `UPDATE posts SET like_post_id=${like_post_id}`;
   conn.query(postDelQuery);
   conn.query(commentDelQuery);
   conn.query(signinUserEditQuery);
+  callback();
+};
+
+//좋아요 누른 게시물 post_id 업데이트
+exports.MlikeCountEdit = (likeCountEditData) => {
+  const stringData = JSON.stringify(likeCountEditData); // 배열을 JSON 문자열로 변환
+  const query = `UPDATE signin_user SET like_post_id = '${stringData}'`;
+  conn.query(query);
 };
