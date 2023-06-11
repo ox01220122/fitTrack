@@ -81,7 +81,7 @@
         /* box-sizing: border-box; */
       }
 
-      /* 게시 버튼 (upload)*/
+      /* 게시 버튼 container (upload)*/
       .postUploadBox {
         margin-left: 50px;
         margin-right: 50px;
@@ -90,7 +90,16 @@
         justify-content: flex-end; /* 변경: 오른쪽 정렬 */
         align-items: flex-start;
       }
-
+      /* 취소버튼 */
+      .cancelUpload {
+        background-color: white;
+        color: black;
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        margin: 5px;
+      }
+      /* 게시버튼 */
       .postUpload {
         background-color: white;
         color: black;
@@ -153,6 +162,9 @@
           </div>
 
           <div class="postUploadBox">
+            <button type="button" class="cancelUpload" onclick="cancelUpload()">
+              취소
+            </button>
             <button type="button" class="postUpload" onclick="postUpload()">
               게시
             </button>
@@ -190,6 +202,11 @@
         // bord.bordInputTitle.value = "";
         // bord.bordInputContent.value = "";
       }
+    }
+
+    function cancelUpload() {
+      const signin_id = "<%= signinId %>";
+      window.location.href = `/Mypost?signinId=${signin_id}`;
     }
   </script>
 </html>

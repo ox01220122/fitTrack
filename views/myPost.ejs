@@ -212,6 +212,7 @@
     // 게시물 수정
     function clickCorrectionButton() {
       CheckedCheckboxes();
+      console.log("배열", checkedCheckboxes);
       var checkboxes = document.querySelectorAll('input[type="checkbox"]');
       var postIds = []; // 체크된 태그의 ID들을 담을 배열
       checkboxes.forEach(function (checkbox) {
