@@ -192,6 +192,7 @@ exports.Cdel = (req, res) => {
   });
 };
 
+// PATCH localhost:8000/likeCountEdit
 exports.ClikeCountEdit = (req, res) => {
   userData.MlikeCountEdit(req.body, (result) => {
     res.send({ result: true });
