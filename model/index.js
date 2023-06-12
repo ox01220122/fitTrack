@@ -58,7 +58,6 @@ exports.Msearch = (searchData, callback) => {
 exports.MshowPost = (postIdData, callback) => {
   const query = `SELECT * FROM posts WHERE post_id = ${postIdData}`;
   conn.query(query, (err, rows) => {
-    console.log("post_id일치 데이터 : ", rows);
     callback(rows);
   });
 };
@@ -66,7 +65,6 @@ exports.MshowPost = (postIdData, callback) => {
 exports.MshowPostComment = (postIdData, callback) => {
   const query = `SELECT * FROM comments WHERE post_id = ${postIdData} ORDER BY post_id DESC`;
   conn.query(query, (err, rows) => {
-    console.log("post_id일치 댓글 데이터 : ", rows);
     callback(rows);
   });
 };
@@ -97,12 +95,10 @@ exports.MpatchLikeCount = (postIdData, callback) => {
     } else {
       updateLikeCount = rows[0].like_count - 1;
     }
-    console.log("좋아요 수정값 : ", updateLikeCount);
 
     query = `UPDATE posts SET like_count='${updateLikeCount}'
     WHERE post_id = ${postIdData.postId}`;
     conn.query(query);
-    console.log("헬로! ", rows);
     callback(rows);
   });
 };
@@ -123,8 +119,6 @@ exports.Mdel = (delDate, callback) => {
     //새로운 배열 만들어서 signin_user에 update
     const likePostIdQuery = `SELECT like_post_id FROM signin_user`;
     conn.query(likePostIdQuery, (err, rows) => {
-      console.log("타입 : ", typeof rows[0].like_post_id);
-      console.log("문자열로 가져와짐 : ", typeof rows[0].like_post_id);
       let UserlikePostId = rows[0].like_post_id;
       if (UserlikePostId !== "[]") {
         UserlikePostId = UserlikePostId.slice(1, -1);
@@ -133,12 +127,7 @@ exports.Mdel = (delDate, callback) => {
         UserlikePostId = UserlikePostId.map((UserlikePostId) =>
           parseInt(UserlikePostId.trim())
         );
-        console.log("배열로 만들었당", UserlikePostId);
-        console.log("만든 배열의 type", typeof UserlikePostId);
-        console.log("post_id 출력", delDate.post_id);
         for (const id of delDate.post_id) {
-          console.log("검사하는 post_id", id);
-          console.log("검사하는 post_id 타입", typeof id);
           if (UserlikePostId.includes(parseInt(id))) {
             const index = UserlikePostId.indexOf(parseInt(id));
             if (index > -1) {
@@ -146,10 +135,7 @@ exports.Mdel = (delDate, callback) => {
             }
           }
         }
-        console.log("만들어진 배열", UserlikePostId);
         UserlikePostId = JSON.stringify(UserlikePostId); // 배열을 JSON 문자열로 변환([]도 포함)
-        console.log("문자열 타입확인: ", typeof UserlikePostId);
-        console.log("문자열 확인: ", UserlikePostId);
         const signinUserEditQuery = `UPDATE signin_user SET like_post_id = '${UserlikePostId}'
         WHERE signin_id = '${delDate.signin_id}'`;
         conn.query(signinUserEditQuery);

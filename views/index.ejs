@@ -306,7 +306,6 @@
     <% } %> <% } %>
   </body>
   <script>
-    // console.log("<%= signinUser[0].signin_id%>");
     const postBord = document.querySelector(".postBord");
     const write = document.querySelector(".write");
     const list = document.querySelector(".list");
@@ -314,21 +313,17 @@
 
     //user가 좋아요 눌러 놓은 post는 full 하트로 바꿔주기
     let UserlikePostId = "<%=signinUser[0].like_post_id%>";
-    console.log("확인", UserlikePostId);
     if (!(UserlikePostId == "" || UserlikePostId == "[]")) {
       UserlikePostId = UserlikePostId.slice(1, -1);
       UserlikePostId = UserlikePostId.split(",");
       UserlikePostId = UserlikePostId.map((item) => parseInt(item.trim()));
-      console.log("여기야!", UserlikePostId);
     } else {
       UserlikePostId = [];
-      console.log("하트 없음", UserlikePostId);
     }
 
     //배열에 있는 post_id값과 일치하는 post의 하트들을 full하트로 바꿔주기
     for (let i = 0; i < UserlikePostId.length; i++) {
       let likeCount = "#emptyHeart-" + parseInt(UserlikePostId[i]);
-      console.log(likeCount);
       const defaultHeart = document.querySelector(likeCount);
       defaultHeart.classList.remove("fa-regular");
       defaultHeart.classList.add("fa-solid");
@@ -347,7 +342,6 @@
     function search() {
       //검색 눌렀을 경우 데이터 베이스에서 일치하는 단어 있는 쿼리문 가져오기
       const searchInput = document.getElementById("search");
-      console.log("검색어 : ", searchInput.value);
       if (!searchInput.value) {
         alert("검색어를 입력하세요");
       } else {
@@ -363,18 +357,14 @@
     //댓글 아이콘 눌렀을 때 페이지 이동
     function clickComment(element) {
       const postId = element.id.split("-")[1];
-      console.log("Clicked post_id:", postId);
       window.location.href = `/list/showPost?postId=${postId}`;
     }
 
-    // console.log("이전상태 배열에 넣기", arrHeartPostId);
     const arrHeartPostId = UserlikePostId;
     //하트 눌렀을 경우 like_count ++ 해주기
-    console.log("새로 생성한 배열 타입 : ", typeof arrHeartPostId);
     function clickHeart(element) {
       // 좋아요 누른 post_id
       const emptyHeartNum = element.id.split("-")[1];
-      console.log("Clicked post_id:", emptyHeartNum);
       //좋아요 누른 post_id를 배열로 만들어 signin_user에 저장하기
 
       //하트 선택
@@ -392,7 +382,6 @@
         if (!arrHeartPostId.includes(parseInt(emptyHeartNum))) {
           arrHeartPostId.push(parseInt(emptyHeartNum));
         }
-        console.log("push후 : ", arrHeartPostId);
         //나중에 함수화 하기!!!
         axios({
           //데이터베이스에 좋아요+1 값 업데이트(새로고침 했을때 반영)
@@ -419,7 +408,6 @@
             arrHeartPostId.splice(index, 1);
           }
         }
-        console.log("splice후 : ", arrHeartPostId);
         axios({
           method: "PATCH",
           url: "/",
@@ -429,14 +417,12 @@
           },
         }).then((res) => {
           //좋아요수 - 1
-          // console.log(res.data.likeCount[0].like_count);
           likeCount.textContent = res.data.likeCount[0].like_count - 1;
           window.location.href = `/`;
         });
       }
 
       //signin_user에 저장하기
-      console.log("데이터 보내기 전 배열입니다", arrHeartPostId);
       axios({
         method: "PATCH",
         url: "/likeCountEdit",
@@ -458,7 +444,6 @@
     function clickSendButton(element) {
       //게시글의 post_id
       const commentPostNum = element.id.split("-")[1];
-      console.log("Clicked post_id:", commentPostNum);
 
       const Sendbord = document.forms["sendForm-" + commentPostNum];
 
@@ -475,7 +460,6 @@
 
       //send버튼 눌렀을 때 댓글 저장하기
       const sendPostId = element.id.split("-")[1];
-      console.log("Clicked post_id:", sendPostId);
 
       if (Sendbord.bordInputComment.value != "") {
         const commentData = {
