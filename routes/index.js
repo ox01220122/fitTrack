@@ -1,5 +1,5 @@
 const express = require("express");
-const controller = require("../index");
+const controller = require("../controller/index");
 const router = express.Router();
 
 //GET localhost:8000 (index)
